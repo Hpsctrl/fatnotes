@@ -1,0 +1,750 @@
+/* ==========================================================================
+   Question Paper Renderer & Exam Sheet Styles
+   ========================================================================== */
+
+.qp-renderer-root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ─── Top Control Bar ─────────────────────────────────────────────────── */
+.qp-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.65rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 20px 20px 0 0;
+  flex-wrap: wrap;
+  z-index: 10;
+}
+
+.qp-toolbar-left,
+.qp-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* Tab Switcher (Paper / Answers / Combined) */
+.qp-tabs {
+  display: inline-flex;
+  background: rgba(0, 0, 0, 0.12);
+  padding: 3px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.qp-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.32rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #2c3e50;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+}
+
+.qp-tab-btn:hover {
+  color: #0f172a;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.qp-tab-btn.active {
+  background: #ffffff;
+  color: #1e3a8a;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  font-weight: 700;
+}
+
+/* Theme Selector */
+.qp-theme-select-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  padding: 0.22rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.qp-theme-select {
+  border: none;
+  background: transparent;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #0f172a;
+  cursor: pointer;
+  outline: none;
+}
+
+/* Action Buttons */
+.qp-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.qp-action-btn.secondary {
+  background: rgba(255, 255, 255, 0.35);
+  color: #1e293b;
+}
+
+.qp-action-btn.secondary:hover {
+  background: rgba(255, 255, 255, 0.6);
+  transform: translateY(-1px);
+}
+
+.qp-action-btn.primary {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.qp-action-btn.primary:hover {
+  background: linear-gradient(135deg, #1d4ed8, #1e40af);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+}
+
+/* ─── Paper Viewport Container ────────────────────────────────────────── */
+.qp-viewport {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 1.5rem 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background: rgba(0, 0, 0, 0.04);
+}
+
+/* ─── Examination Sheet (The Authentic Physical Paper Page) ───────────── */
+.qp-sheet {
+  width: 100%;
+  max-width: 820px;
+  min-height: 1050px;
+  padding: 3rem 3.2rem;
+  box-sizing: border-box;
+  margin: 0 auto;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+/* ==========================================================================
+   THEME 1: CLASSIC BOARD EXAM ("The Scary White Page")
+   ========================================================================== */
+.qp-sheet.theme-classic-white {
+  background-color: #ffffff;
+  color: #111111;
+  font-family: 'EB Garamond', 'Merriweather', 'Times New Roman', Times, serif;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.15),
+    0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.qp-sheet.theme-classic-white .qp-exam-header {
+  text-align: center;
+  border-bottom: 2.5px solid #111111;
+  padding-bottom: 1rem;
+  margin-bottom: 1.25rem;
+  position: relative;
+}
+
+.qp-sheet.theme-classic-white .qp-roll-box-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.88rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid #777777;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+}
+
+.qp-roll-boxes {
+  display: inline-flex;
+  gap: 3px;
+  margin-left: 6px;
+}
+
+.qp-roll-box {
+  width: 22px;
+  height: 22px;
+  border: 1.5px solid #111111;
+  display: inline-block;
+}
+
+.qp-sheet.theme-classic-white h1.qp-institution {
+  font-family: 'Cinzel', 'EB Garamond', serif;
+  font-size: 1.65rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  margin: 0.2rem 0;
+  text-transform: uppercase;
+  color: #000000;
+}
+
+.qp-sheet.theme-classic-white h2.qp-exam-title {
+  font-size: 1.22rem;
+  font-weight: 700;
+  margin: 0.25rem 0 0.5rem;
+  text-transform: uppercase;
+  color: #111111;
+  letter-spacing: 0.5px;
+}
+
+.qp-sheet.theme-classic-white .qp-meta-grid {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0.6rem 0;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border-top: 1px solid #111111;
+  border-bottom: 1px solid #111111;
+  padding: 0.35rem 0.2rem;
+}
+
+.qp-sheet.theme-classic-white .qp-instructions-box {
+  border: 1px solid #333333;
+  padding: 0.85rem 1.1rem;
+  margin: 1.25rem 0;
+  background-color: #fafafa;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  border-radius: 2px;
+}
+
+.qp-sheet.theme-classic-white .qp-instructions-title {
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 0.95rem;
+  margin-bottom: 0.4rem;
+  letter-spacing: 0.5px;
+  display: block;
+}
+
+.qp-sheet.theme-classic-white .qp-section-divider {
+  text-align: center;
+  margin: 2rem 0 1.25rem;
+  position: relative;
+}
+
+.qp-sheet.theme-classic-white .qp-section-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background: #ffffff;
+  padding: 0.2rem 1.2rem;
+  border: 1.5px solid #111111;
+  display: inline-block;
+  margin-bottom: 0.4rem;
+}
+
+.qp-sheet.theme-classic-white .qp-section-desc {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: #444444;
+  display: block;
+}
+
+/* ==========================================================================
+   THEME 2: MODERN ACADEMY
+   ========================================================================== */
+.qp-sheet.theme-modern-academy {
+  background-color: #ffffff;
+  color: #0f172a;
+  font-family: 'Outfit', 'Inter', -apple-system, sans-serif;
+  font-size: 0.98rem;
+  line-height: 1.65;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 15px 35px rgba(30, 41, 59, 0.12);
+}
+
+.qp-sheet.theme-modern-academy .qp-exam-header {
+  border-bottom: 3px solid #2563eb;
+  padding-bottom: 1.2rem;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+  margin: -3rem -3.2rem 1.5rem -3.2rem;
+  padding: 2.5rem 3.2rem 1.2rem 3.2rem;
+  border-radius: 12px 12px 0 0;
+  text-align: center;
+}
+
+.qp-sheet.theme-modern-academy h1.qp-institution {
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: #1e3a8a;
+  letter-spacing: -0.02em;
+}
+
+.qp-sheet.theme-modern-academy h2.qp-exam-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #475569;
+  margin: 0.2rem 0 0.75rem;
+}
+
+.qp-sheet.theme-modern-academy .qp-meta-grid {
+  display: flex;
+  justify-content: space-between;
+  background: #f1f5f9;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: #334155;
+}
+
+.qp-sheet.theme-modern-academy .qp-instructions-box {
+  background: #eff6ff;
+  border-left: 4px solid #3b82f6;
+  padding: 1rem 1.25rem;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.9rem;
+  margin: 1.5rem 0;
+}
+
+.qp-sheet.theme-modern-academy .qp-section-title {
+  background: #1e293b;
+  color: #ffffff;
+  padding: 0.4rem 1.2rem;
+  border-radius: 6px;
+  font-weight: 800;
+  font-size: 1rem;
+  display: inline-block;
+  letter-spacing: 0.5px;
+}
+
+/* ==========================================================================
+   THEME 3: VINTAGE TYPEWRITER
+   ========================================================================== */
+.qp-sheet.theme-vintage-typewriter {
+  background-color: #fcf8ee;
+  color: #2b2520;
+  font-family: 'Courier Prime', Courier, monospace;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  border: 1px solid #d6cfbe;
+  border-radius: 2px;
+  box-shadow: 0 10px 25px rgba(60, 50, 40, 0.15);
+}
+
+.qp-sheet.theme-vintage-typewriter .qp-exam-header {
+  text-align: center;
+  border-bottom: 2px dashed #665c54;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.qp-sheet.theme-vintage-typewriter h1.qp-institution {
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.qp-sheet.theme-vintage-typewriter .qp-instructions-box {
+  border: 1px dashed #665c54;
+  padding: 0.75rem 1rem;
+  margin: 1.25rem 0;
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.qp-sheet.theme-vintage-typewriter .qp-section-title {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  border-top: 1px dashed #665c54;
+  border-bottom: 1px dashed #665c54;
+  padding: 0.25rem 0;
+  display: block;
+  text-align: center;
+  margin: 1.5rem 0 1rem;
+}
+
+/* ==========================================================================
+   THEME 4: AESTHETIC DARK
+   ========================================================================== */
+.qp-sheet.theme-aesthetic-dark {
+  background: radial-gradient(circle at 20% 0%, rgba(37, 99, 235, 0.15), transparent 40%),
+              linear-gradient(145deg, #090d14 0%, #111722 55%, #141c2b 100%);
+  color: #f1f5f9;
+  font-family: 'Outfit', -apple-system, sans-serif;
+  font-size: 0.98rem;
+  line-height: 1.6;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+}
+
+.qp-sheet.theme-aesthetic-dark .qp-exam-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 1.2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.qp-sheet.theme-aesthetic-dark h1.qp-institution {
+  font-size: 1.6rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #ffffff, #93c5fd);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.qp-sheet.theme-aesthetic-dark .qp-meta-grid {
+  display: flex;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  font-weight: 700;
+  color: #94a3b8;
+}
+
+.qp-sheet.theme-aesthetic-dark .qp-instructions-box {
+  background: rgba(30, 58, 138, 0.2);
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  color: #cbd5e1;
+}
+
+.qp-sheet.theme-aesthetic-dark .qp-section-title {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #ffffff;
+  padding: 0.35rem 1.2rem;
+  border-radius: 999px;
+  font-weight: 800;
+  display: inline-block;
+}
+
+/* ─── Question Content & Markdown Typography ──────────────────────────── */
+.qp-content {
+  position: relative;
+}
+
+.qp-content p {
+  margin-bottom: 0.85rem;
+}
+
+.qp-content h1,
+.qp-content h2,
+.qp-content h3 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.6rem;
+  line-height: 1.3;
+}
+
+.qp-content h1 {
+  font-size: 1.45rem;
+  text-align: center;
+  border-bottom: 2px solid currentColor;
+  padding-bottom: 0.4rem;
+}
+
+.qp-content h2 {
+  font-size: 1.2rem;
+  margin-top: 1.8rem;
+  padding-bottom: 0.25rem;
+}
+
+.qp-content h3 {
+  font-size: 1.05rem;
+}
+
+.qp-content ul,
+.qp-content ol {
+  padding-left: 1.75rem;
+  margin-bottom: 1rem;
+}
+
+.qp-content li {
+  margin-bottom: 0.45rem;
+}
+
+/* MCQ Options layout */
+.qp-content p:has(+ p) {
+  margin-bottom: 0.3rem;
+}
+
+/* Centered OR Choice */
+.qp-content strong:only-child {
+  display: inline-block;
+}
+
+.qp-or-divider {
+  text-align: center;
+  font-weight: 800;
+  font-size: 1rem;
+  margin: 1.2rem 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.qp-or-divider::before,
+.qp-or-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.3;
+}
+
+/* Marks Badge in Text */
+.qp-marks-tag {
+  float: right;
+  font-weight: 800;
+  font-size: 0.95rem;
+  padding-left: 0.5rem;
+}
+
+/* Footer (P.T.O / End of Paper) */
+.qp-sheet-footer {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid currentColor;
+  opacity: 0.7;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  page-break-after: avoid;
+}
+
+/* Marking Scheme Divider & Special Box */
+.qp-solution-banner {
+  margin: 3.5rem 0 2rem;
+  padding: 1.25rem;
+  text-align: center;
+  background: #f0fdf4;
+  border: 2px solid #22c55e;
+  border-radius: 8px;
+  color: #15803d;
+  page-break-before: always;
+}
+
+.theme-aesthetic-dark .qp-solution-banner {
+  background: rgba(34, 197, 94, 0.15);
+  border-color: rgba(34, 197, 94, 0.4);
+  color: #4ade80;
+}
+
+.qp-solution-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  margin-bottom: 0.25rem;
+  text-transform: uppercase;
+}
+
+.qp-solution-subtitle {
+  font-size: 0.9rem;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+/* ==========================================================================
+   PRINT STYLES (@media print) & HTML2PDF PAGE BREAKS
+   ========================================================================== */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  body::before,
+  .liquid-anim-bg,
+  .qp-toolbar,
+  .generator-panel,
+  .settings-panel,
+  .preview-header {
+    display: none !important;
+  }
+
+  .app-container,
+  .main-content,
+  .preview-panel,
+  .qp-renderer-root,
+  .qp-viewport {
+    height: auto !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    display: block !important;
+  }
+
+  .qp-sheet {
+    max-width: 100% !important;
+    width: 100% !important;
+    min-height: auto !important;
+    padding: 15mm !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  .qp-content p,
+  .qp-content li,
+  .qp-content h2,
+  .qp-content h3 {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .qp-solution-banner {
+    page-break-before: always;
+    break-before: page;
+  }
+}
+
+/* html2pdf explicit break modes */
+.html2pdf__page-break {
+  page-break-before: always;
+  break-before: page;
+  height: 0;
+  display: block;
+}
+
+/* ==========================================================================
+   QUESTION PAPER UI CONTROLS (Toolbar uses Svetze UI font)
+   ========================================================================== */
+.qp-tab-btn,
+.qp-theme-select-wrap,
+.qp-action-btn,
+.qp-stats-chip {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  letter-spacing: -0.01em;
+}
+
+/* Exam paper sheets never use display font */
+.qp-renderer-root .qp-sheet,
+.qp-renderer-root .qp-sheet * {
+  /* Retains declared theme academic serif/sans fonts */
+}
+
+/* ==========================================================================
+   MOBILE RESPONSIVENESS (<= 768px)
+   ========================================================================== */
+@media screen and (max-width: 768px) {
+  .qp-viewport {
+    padding: 0.65rem 0.4rem;
+  }
+
+  .qp-sheet {
+    padding: 1.25rem 0.85rem !important;
+    min-height: auto !important;
+    max-width: 100% !important;
+    border-radius: 8px;
+    font-size: 0.94rem !important;
+    line-height: 1.55 !important;
+  }
+
+  .qp-roll-box-wrap {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.4rem !important;
+  }
+
+  .qp-roll-boxes {
+    margin-left: 0 !important;
+    flex-wrap: wrap !important;
+  }
+
+  .qp-roll-box {
+    width: 18px !important;
+    height: 18px !important;
+  }
+
+  .qp-sheet.theme-classic-white h1.qp-institution {
+    font-size: 1.25rem !important;
+  }
+
+  .qp-sheet.theme-classic-white h2.qp-exam-title {
+    font-size: 1.05rem !important;
+  }
+
+  .qp-meta-grid {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.25rem !important;
+  }
+
+  .qp-instructions-box {
+    padding: 0.65rem 0.75rem !important;
+    font-size: 0.86rem !important;
+  }
+
+  .qp-section-title {
+    font-size: 0.95rem !important;
+    padding: 0.15rem 0.8rem !important;
+  }
+
+  .qp-solution-banner {
+    padding: 0.65rem !important;
+  }
+
+  .qp-solution-title {
+    font-size: 1rem !important;
+  }
+
+  .qp-solution-subtitle {
+    font-size: 0.8rem !important;
+  }
+
+  .qp-sheet-footer {
+    flex-direction: column !important;
+    gap: 0.25rem !important;
+    text-align: center !important;
+    font-size: 0.75rem !important;
+  }
+}
+
+

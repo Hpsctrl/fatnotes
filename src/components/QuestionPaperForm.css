@@ -1,0 +1,374 @@
+/* ==========================================================================
+   Question Paper Generator Form Styles
+   ========================================================================== */
+
+.qp-form-root {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  height: 100%;
+  overflow-y: auto;
+  padding-right: 0.35rem;
+}
+
+/* ─── Presets Row ─────────────────────────────────────────────────────── */
+.qp-presets-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.qp-presets-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #334155;
+}
+
+.qp-presets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 0.45rem;
+}
+
+.qp-preset-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0.45rem 0.65rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: left;
+}
+
+.qp-preset-btn:hover {
+  background: rgba(255, 255, 255, 0.6);
+  transform: translateY(-1px);
+  border-color: rgba(37, 99, 235, 0.4);
+}
+
+.qp-preset-btn.active {
+  background: rgba(37, 99, 235, 0.12);
+  border: 1.5px solid #2563eb;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+}
+
+.qp-preset-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 0.15rem;
+}
+
+.qp-preset-title {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.qp-preset-badge {
+  font-size: 0.68rem;
+  font-weight: 900;
+  padding: 0.12rem 0.38rem;
+  border-radius: 999px;
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.qp-preset-desc {
+  font-size: 0.68rem;
+  color: #64748b;
+  line-height: 1.25;
+}
+
+/* ─── Blueprint Section (Marks Counter) ───────────────────────────────── */
+.qp-blueprint-card {
+  background: rgba(255, 255, 255, 0.32);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 18px;
+  padding: 0.95rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.qp-blueprint-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  padding-bottom: 0.5rem;
+}
+
+.qp-blueprint-title {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.qp-total-marks-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+  color: #ffffff;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.qp-total-marks-pill .highlight {
+  color: #60a5fa;
+}
+
+.qp-sections-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.qp-section-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+  padding: 0.45rem 0.75rem;
+  gap: 0.5rem;
+  transition: background 0.2s ease;
+}
+
+.qp-section-row:hover {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.qp-section-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.qp-section-name {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.qp-section-marks-badge {
+  font-size: 0.68rem;
+  font-weight: 800;
+  background: rgba(37, 99, 235, 0.15);
+  color: #1d4ed8;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+}
+
+.qp-section-subtitle {
+  font-size: 0.68rem;
+  color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Counter Controls */
+.qp-counter {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 999px;
+  padding: 2px 4px;
+}
+
+.qp-counter-btn {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: #f1f5f9;
+  color: #1e293b;
+  cursor: pointer;
+  font-weight: 800;
+  font-size: 0.85rem;
+  transition: all 0.15s ease;
+}
+
+.qp-counter-btn:hover:not(:disabled) {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.qp-counter-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.qp-counter-val {
+  min-width: 22px;
+  text-align: center;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.qp-section-subtotal {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #2563eb;
+  min-width: 48px;
+  text-align: right;
+}
+
+/* ─── Collapsible Header Details ──────────────────────────────────────── */
+.qp-collapsible-card {
+  background: rgba(255, 255, 255, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.qp-collapsible-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.65rem 0.85rem;
+  cursor: pointer;
+  user-select: none;
+  background: rgba(255, 255, 255, 0.2);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.qp-collapsible-header:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.qp-collapsible-body {
+  padding: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.qp-input-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.qp-input-full {
+  grid-column: span 2;
+}
+
+.qp-field-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.qp-field-wrap label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #475569;
+}
+
+.qp-field-wrap input,
+.qp-field-wrap select {
+  padding: 0.42rem 0.65rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.5);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #0f172a;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.qp-field-wrap input:focus,
+.qp-field-wrap select:focus {
+  border-color: #2563eb;
+  background: #ffffff;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+/* ─── Options Toggles ─────────────────────────────────────────────────── */
+.qp-options-row {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.qp-toggle-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.38rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #334155;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease;
+}
+
+.qp-toggle-pill.active {
+  background: #2563eb;
+  color: #ffffff;
+  border-color: #1d4ed8;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+}
+
+/* Difficulty Selector */
+.qp-diff-pills {
+  display: flex;
+  background: rgba(0, 0, 0, 0.08);
+  padding: 2px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.qp-diff-btn {
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  border: none;
+  background: transparent;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.qp-diff-btn.active {
+  background: #ffffff;
+  color: #0f172a;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}

@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=Caveat:wght@400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@500;600;700;800&display=swap');
+
+@font-face {
+  font-family: 'Svetze';
+  src: url('/fonts/svetze/Svetze.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --font-ui-display: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-ui-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-notes: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --bg-page: #fdf6e3;
+  --bg-page-alt: #faf0d7;
+  --line-color: rgba(100, 149, 237, 0.18);
+  --margin-color: rgba(220, 60, 60, 0.35);
+  --bg-glass: rgba(255, 255, 255, 0.35);
+  --bg-glass-hover: rgba(255, 255, 255, 0.5);
+  --border-glass: rgba(255, 255, 255, 0.55);
+  --border-color: rgba(0, 0, 0, 0.08);
+  --text-primary: #2c2c2c;
+  --text-secondary: #6b6b6b;
+  --accent: #4f46e5;
+  --accent-hover: #4338ca;
+  --accent-light: rgba(79, 70, 229, 0.12);
+  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.08);
+  --shadow-glow: 0 0 30px rgba(79, 70, 229, 0.1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #0b0f19;
+}
+
+/* Static background for liquid glass (liquidGL takes a static snapshot) */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: -2;
+  /* Rich, vibrant red and pink roses with dark green leaves - high contrast for refraction! */
+  background-image: url('https://images.unsplash.com/photo-1518895949257-7621c3c786d7?q=80&w=2576&auto=format&fit=crop');
+  background-size: cover;
+  background-position: center;
+}
+
+#root { display: flex; flex-direction: column; min-height: 100vh; }
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+input, textarea { font-family: inherit; outline: none; }
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.04); }
+::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.15); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.25); }
