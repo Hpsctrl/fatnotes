@@ -89,7 +89,7 @@
   overflow: hidden;
   border-radius: 30px;
   contain: layout paint style;
-  background: rgba(12, 16, 24, 0.55); /* Translucent smoked glass */
+  background: transparent; /* Crystal-clear liquid glass */
   -webkit-backdrop-filter: blur(var(--glass-frost, 8px)) saturate(1.4);
   backdrop-filter: blur(var(--glass-frost, 8px)) saturate(1.4);
   border: 1px solid rgba(255, 255, 255, 0.25); /* More subtle border */
@@ -1576,12 +1576,12 @@
 }
 
 /* --- LIQUID GLASS PANEL OVERRIDES (for liquidGL WebGL rendering) --- */
-/* Panels are translucent with hardware-accelerated frost blur, blending with WebGL refraction */
+/* Panels must be transparent crystal liquid glass so WebGL refraction & specular shine show through */
 .generator-panel,
 .preview-panel {
   position: relative !important;
   isolation: isolate !important;
-  background: rgba(12, 16, 24, 0.55) !important;
+  background: transparent !important;
   -webkit-backdrop-filter: blur(var(--glass-frost, 8px)) saturate(1.4) !important;
   backdrop-filter: blur(var(--glass-frost, 8px)) saturate(1.4) !important;
   border: 1px solid rgba(255, 255, 255, 0.4) !important;
@@ -2862,7 +2862,7 @@ button:focus-visible,
     overflow: hidden !important;
     scroll-snap-align: start !important;
     scroll-snap-stop: always !important;
-    background: rgba(12, 16, 24, 0.55) !important;
+    background: transparent !important;
     -webkit-backdrop-filter: blur(var(--glass-frost, 8px)) saturate(1.4) !important;
     backdrop-filter: blur(var(--glass-frost, 8px)) saturate(1.4) !important;
   }
