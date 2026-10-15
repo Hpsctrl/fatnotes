@@ -753,7 +753,13 @@ function App() {
     const saved = localStorage.getItem('glassSettings');
     if (saved) {
       try {
-        return JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+        return {
+          refraction: parsed.refraction ?? 0.08,
+          bevelDepth: parsed.bevelDepth ?? 0.25,
+          bevelWidth: parsed.bevelWidth ?? 0.15,
+          frost: parsed.frost !== undefined ? parsed.frost : 8,
+        };
       } catch (e) {
         // ignore
       }
@@ -762,7 +768,7 @@ function App() {
       refraction: 0.08, // Stronger refraction to be visible on white grid
       bevelDepth: 0.25, // Deep bevels for liquid look
       bevelWidth: 0.15,
-      frost: 4, // Enough frost to blur, but not enough to turn solid white
+      frost: 8, // Frosted blur level
     };
   });
 
@@ -967,17 +973,32 @@ function App() {
     };
   }, []);
 
+  // Sync frost blur directly to CSS custom property so blur works hardware-accelerated on all devices
+  useEffect(() => {
+    document.documentElement.style.setProperty('--glass-frost', `${glassSettings.frost}px`);
+  }, [glassSettings.frost]);
+
   const updateGlassSetting = (key: string, value: number) => {
     const newSettings = { ...glassSettings, [key]: value };
     setGlassSettings(newSettings);
     localStorage.setItem('glassSettings', JSON.stringify(newSettings));
     
+    if (key === 'frost') {
+      document.documentElement.style.setProperty('--glass-frost', `${value}px`);
+    }
+
     // @ts-ignore
     if (window.__liquidGLRenderer__ && window.__liquidGLRenderer__.lenses) {
       // @ts-ignore
       window.__liquidGLRenderer__.lenses.forEach((lens: any) => {
         lens.options[key] = value;
       });
+      // Force instant render update in WebGL
+      // @ts-ignore
+      if (typeof window.__liquidGLRenderer__.render === 'function') {
+        // @ts-ignore
+        window.__liquidGLRenderer__.render();
+      }
     }
   };
 

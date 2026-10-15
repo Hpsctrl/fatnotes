@@ -304,7 +304,7 @@
           vec4 refrCol;
 
           if (u_frost > 0.0) {
-              float radius = u_frost * 4.0;
+              float radius = u_frost * 8.0;
               vec4 sum = vec4(0.0);
               const int SAMPLES = 16;
 
@@ -315,6 +315,7 @@
                   sum += texture2D(u_tex, sampleUV + offset);
               }
               refrCol = sum / float(SAMPLES);
+              refrCol.rgb = mix(refrCol.rgb, vec3(0.85, 0.92, 1.0), min(0.35, u_frost * 0.015));
           } else {
               refrCol = texture2D(u_tex, sampleUV);
               refrCol += texture2D(u_tex, sampleUV + vec2( texel.x, 0.0));

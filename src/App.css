@@ -27,6 +27,9 @@
   --icon-fluid-sz: 16px;
   --panel-pad-x: 1.25rem;
   --panel-pad-y: 1rem;
+
+  /* Frosted Glass Dynamic Blur */
+  --glass-frost: 8px;
 }
 
 /* Layout */
@@ -86,7 +89,9 @@
   overflow: hidden;
   border-radius: 30px;
   contain: layout paint style;
-  background: rgba(12, 16, 24, 0.7); /* Dark smoked glass to contrast with white grid */
+  background: rgba(12, 16, 24, 0.55); /* Translucent smoked glass */
+  -webkit-backdrop-filter: blur(var(--glass-frost, 8px)) saturate(1.4);
+  backdrop-filter: blur(var(--glass-frost, 8px)) saturate(1.4);
   border: 1px solid rgba(255, 255, 255, 0.25); /* More subtle border */
   box-shadow:
     0 26px 70px rgba(0, 0, 0, 0.2),
@@ -1571,12 +1576,14 @@
 }
 
 /* --- LIQUID GLASS PANEL OVERRIDES (for liquidGL WebGL rendering) --- */
-/* Panels must be transparent so the WebGL canvas behind them is visible */
+/* Panels are translucent with hardware-accelerated frost blur, blending with WebGL refraction */
 .generator-panel,
 .preview-panel {
   position: relative !important;
   isolation: isolate !important;
-  background: transparent !important;
+  background: rgba(12, 16, 24, 0.55) !important;
+  -webkit-backdrop-filter: blur(var(--glass-frost, 8px)) saturate(1.4) !important;
+  backdrop-filter: blur(var(--glass-frost, 8px)) saturate(1.4) !important;
   border: 1px solid rgba(255, 255, 255, 0.4) !important;
   overflow: visible !important;
   border-radius: 28px !important;
@@ -2855,6 +2862,9 @@ button:focus-visible,
     overflow: hidden !important;
     scroll-snap-align: start !important;
     scroll-snap-stop: always !important;
+    background: rgba(12, 16, 24, 0.55) !important;
+    -webkit-backdrop-filter: blur(var(--glass-frost, 8px)) saturate(1.4) !important;
+    backdrop-filter: blur(var(--glass-frost, 8px)) saturate(1.4) !important;
   }
 
   .panel-header {
