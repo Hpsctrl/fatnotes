@@ -421,7 +421,7 @@ function LiquidProviderSwitch({
   const isMoving = pressed || clicked;
 
   const tabWidth = trackWidth / 3;
-  const knobWidth = Math.max(76, Math.floor(tabWidth - 6));
+  const knobWidth = Math.max(60, Math.floor(tabWidth - 6));
   const providerIndex = PROVIDERS.indexOf(provider);
   const posX = Math.max(3, Math.min(trackWidth - knobWidth - 3, Math.round(tabWidth * (providerIndex + 0.5) - knobWidth / 2)));
 
@@ -2017,9 +2017,9 @@ function App() {
               // ── Mobile Phone Compact Collapsible Modal (<= 960px) ─────────────
               <motion.div
                 className="settings-panel mobile-settings-modal"
-                initial={{ opacity: 0, scale: 0.94, y: -10 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.94, y: -10 }}
+                initial={{ opacity: 0, scale: 0.94 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.94 }}
                 transition={{ type: 'spring', damping: 26, stiffness: 360 }}
               >
                 <div className="settings-content">
