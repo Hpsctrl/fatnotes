@@ -520,12 +520,26 @@ function LiquidModeSwitch({
   const knobWidth = Math.max(90, Math.floor((trackWidth - 8) / 2));
   const posX = mode === 'generator' ? 4 : Math.max(4, trackWidth - knobWidth - 4);
 
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const touchX = e.touches[0].clientX - rect.left;
+    const targetMode = touchX > rect.width * 0.5 ? 'preview' : 'generator';
+    if (targetMode !== mode) {
+      onChange(targetMode);
+    }
+  };
+
   return (
     <div
       ref={containerRef}
       className={`lms-root ${isMoving ? 'is-moving' : ''}`}
       role="group"
       aria-label="View Mode"
+      onTouchStart={() => setPressed(true)}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={() => setPressed(false)}
+      onTouchCancel={() => setPressed(false)}
     >
       {/* ── Background Goo layer: Stretchy expanding liquid tail ── */}
       <div className="lms-liquids" style={{ filter: 'url(#goo)' }}>
@@ -557,6 +571,8 @@ function LiquidModeSwitch({
         onMouseDown={() => setPressed(true)}
         onMouseUp={() => setPressed(false)}
         onMouseLeave={() => setPressed(false)}
+        onTouchStart={() => setPressed(true)}
+        onTouchEnd={() => setPressed(false)}
         aria-pressed={mode === 'generator'}
       >
         <FileText size={14} />
@@ -575,6 +591,8 @@ function LiquidModeSwitch({
         onMouseDown={() => setPressed(true)}
         onMouseUp={() => setPressed(false)}
         onMouseLeave={() => setPressed(false)}
+        onTouchStart={() => setPressed(true)}
+        onTouchEnd={() => setPressed(false)}
         aria-pressed={mode === 'preview'}
       >
         <Sparkles size={14} />
@@ -811,6 +829,69 @@ function App() {
         alert('💻 To Install FatNotes:\n\n• In Chrome/Edge: Click the "Install" icon in your address bar (top right) or open menu (⋮) → "Install FatNotes".\n• On Android: Open browser menu (⋮) → "Install app" or "Add to Home screen".');
       }
     }
+  };
+
+  // ── Thumb-Swipeable Tabs & Scroll Tracking ──────────────────────────────
+  const mainScrollRef = useRef<HTMLDivElement>(null);
+  const generatorPanelRef = useRef<HTMLDivElement>(null);
+  const previewPanelRef = useRef<HTMLDivElement>(null);
+  const isProgrammaticScrollRef = useRef(false);
+
+  const switchTab = (tab: 'generator' | 'preview') => {
+    setMobileTab(tab);
+    if (isCompactScreen && mainScrollRef.current) {
+      isProgrammaticScrollRef.current = true;
+      const targetEl = tab === 'generator' ? generatorPanelRef.current : previewPanelRef.current;
+      if (targetEl) {
+        const offsetLeft = targetEl.offsetLeft - mainScrollRef.current.offsetLeft;
+        mainScrollRef.current.scrollTo({
+          left: Math.max(0, offsetLeft),
+          behavior: 'smooth',
+        });
+      }
+      setTimeout(() => {
+        isProgrammaticScrollRef.current = false;
+      }, 450);
+    }
+  };
+
+  const handleMainScroll = () => {
+    if (!isCompactScreen || !mainScrollRef.current) return;
+    if (isProgrammaticScrollRef.current) return;
+
+    const { scrollLeft, clientWidth } = mainScrollRef.current;
+    if (clientWidth <= 0) return;
+
+    const activeTab = scrollLeft > clientWidth * 0.4 ? 'preview' : 'generator';
+    if (activeTab !== mobileTab) {
+      setMobileTab(activeTab);
+    }
+  };
+
+  // Touch gesture helper for responsive thumb flings
+  const touchStartXRef = useRef<number | null>(null);
+  const touchStartYRef = useRef<number | null>(null);
+
+  const handleMainTouchStart = (e: React.TouchEvent) => {
+    touchStartXRef.current = e.touches[0].clientX;
+    touchStartYRef.current = e.touches[0].clientY;
+  };
+
+  const handleMainTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartXRef.current === null || touchStartYRef.current === null) return;
+    const deltaX = e.changedTouches[0].clientX - touchStartXRef.current;
+    const deltaY = e.changedTouches[0].clientY - touchStartYRef.current;
+
+    // Detect horizontal thumb flick
+    if (Math.abs(deltaX) > 40 && Math.abs(deltaX) > Math.abs(deltaY) * 1.2) {
+      if (deltaX < 0 && mobileTab === 'generator') {
+        switchTab('preview');
+      } else if (deltaX > 0 && mobileTab === 'preview') {
+        switchTab('generator');
+      }
+    }
+    touchStartXRef.current = null;
+    touchStartYRef.current = null;
   };
 
   // ── AI Verification Audit State ─────────────────────────────────────────
@@ -1455,7 +1536,7 @@ function App() {
     try {
       setIsGenerating(true);
       setError('');
-      setMobileTab('preview');
+      switchTab('preview');
       setContent('Reading attached documents and extracting content...');
 
       let docText = '';
@@ -1909,7 +1990,7 @@ function App() {
       <div className="mobile-nav-bar">
         <LiquidModeSwitch
           mode={mobileTab}
-          onChange={setMobileTab}
+          onChange={switchTab}
           hasNewContent={Boolean(content && content !== DEFAULT_NOTE)}
         />
         <div className="mobile-header-actions">
@@ -1935,10 +2016,17 @@ function App() {
         </div>
       </div>
 
-      {/* ── Main Content ───────────────────────────────────────────────── */}
-      <main className="main-content">
+      {/* ── Main Content (Thumb-Swipeable Carousel Track on Mobile) ─────── */}
+      <main
+        className="main-content"
+        ref={mainScrollRef}
+        onScroll={handleMainScroll}
+        onTouchStart={handleMainTouchStart}
+        onTouchEnd={handleMainTouchEnd}
+      >
         <motion.div
-          className={`editor-panel generator-panel ${isCompactScreen && mobileTab !== 'generator' ? 'mobile-hidden' : ''}`}
+          ref={generatorPanelRef}
+          className="editor-panel generator-panel"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
@@ -2117,7 +2205,8 @@ function App() {
 
         {/* ── Preview Panel (Auto-Detects Question Papers vs Notes) ─────────────────── */}
         <motion.div
-          className={`preview-panel ${isCompactScreen && mobileTab !== 'preview' ? 'mobile-hidden' : ''}`}
+          ref={previewPanelRef}
+          className="preview-panel"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
@@ -2211,7 +2300,7 @@ function App() {
               rawContent={content}
               paperTitle={noteTopic}
               isGenerating={isGenerating}
-              onBackToEditor={isCompactScreen ? () => setMobileTab('generator') : undefined}
+              onBackToEditor={isCompactScreen ? () => switchTab('generator') : undefined}
             />
           ) : (
             <>
@@ -2221,7 +2310,7 @@ function App() {
                     <button
                       type="button"
                       className="mobile-back-to-gen-btn"
-                      onClick={() => setMobileTab('generator')}
+                      onClick={() => switchTab('generator')}
                       title="Back to Generator"
                     >
                       <ChevronLeft size={16} />
