@@ -303,7 +303,7 @@ export async function exportNotesToAestheticPdf({
       p.footerEl.innerText = `${idx + 1} / ${totalPages}`;
     });
 
-    onProgress?.(`Rendering ${totalPages} aesthetic pages...`);
+    onProgress?.(`Rendering ${totalPages} pages...`);
 
     // 3. Render each page individually with html2canvas and assemble into jsPDF
     const pdf = new jsPDF({

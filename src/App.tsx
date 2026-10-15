@@ -1689,7 +1689,7 @@ function App() {
     try {
       setIsExporting(true);
       const inner = (noteRef.current.querySelector('.note-card-inner') as HTMLElement) || noteRef.current;
-      const cleanTitle = (noteTopic || 'Aesthetic_Notes').replace(/[^\w\s-]/gi, '').trim().replace(/\s+/g, '_');
+      const cleanTitle = (noteTopic || 'Study_Notes').replace(/[^\w\s-]/gi, '').trim().replace(/\s+/g, '_');
 
       await exportNotesToAestheticPdf({
         sourceElement: inner,
@@ -2644,7 +2644,7 @@ function App() {
                     </button>
                   )}
                   <Sparkles size={16} />
-                  <span>Aesthetic Note Output</span>
+                  <span>Notes Preview</span>
                 </div>
                 <button
                   id="export-pdf-btn"
