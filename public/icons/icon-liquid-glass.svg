@@ -1,0 +1,196 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0f1d" />
+      <stop offset="50%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#050814" />
+    </linearGradient>
+
+    <!-- Liquid Aura Cyan Glow -->
+    <radialGradient id="cyanAura" cx="40%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.8" />
+      <stop offset="60%" stop-color="#0284c7" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#0284c7" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Liquid Aura Purple Glow -->
+    <radialGradient id="purpleAura" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#c084fc" stop-opacity="0.85" />
+      <stop offset="50%" stop-color="#9333ea" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#7e22ce" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Liquid Coral Glow -->
+    <radialGradient id="pinkAura" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#f472b6" stop-opacity="0.7" />
+      <stop offset="100%" stop-color="#db2777" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Glass Slab Surface -->
+    <linearGradient id="glassSlab" x1="15%" y1="10%" x2="85%" y2="90%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.32" />
+      <stop offset="35%" stop-color="#ffffff" stop-opacity="0.12" />
+      <stop offset="70%" stop-color="#38bdf8" stop-opacity="0.08" />
+      <stop offset="100%" stop-color="#a855f7" stop-opacity="0.18" />
+    </linearGradient>
+
+    <!-- Glass Border Gradient (Specular highlight top-left, subtle refraction bottom-right) -->
+    <linearGradient id="glassBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9" />
+      <stop offset="30%" stop-color="#ffffff" stop-opacity="0.4" />
+      <stop offset="65%" stop-color="#38bdf8" stop-opacity="0.5" />
+      <stop offset="100%" stop-color="#c084fc" stop-opacity="0.75" />
+    </linearGradient>
+
+    <!-- Glass Diagonal Specular Sheen -->
+    <linearGradient id="specularSheen" x1="0%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.45" />
+      <stop offset="40%" stop-color="#ffffff" stop-opacity="0.15" />
+      <stop offset="70%" stop-color="#ffffff" stop-opacity="0" />
+    </linearGradient>
+
+    <!-- Note Line Glowing Gradient -->
+    <linearGradient id="noteLine1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="60%" stop-color="#818cf8" />
+      <stop offset="100%" stop-color="#c084fc" />
+    </linearGradient>
+
+    <linearGradient id="noteLine2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.3" />
+    </linearGradient>
+
+    <linearGradient id="dropHighlight" x1="20%" y1="20%" x2="80%" y2="80%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95" />
+      <stop offset="40%" stop-color="#ffffff" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.6" />
+    </linearGradient>
+
+    <!-- Drop Shadow Filters -->
+    <filter id="glassShadow" x="-20%" y="-20%" width="150%" height="150%">
+      <feDropShadow dx="0" dy="24" stdDeviation="22" flood-color="#000000" flood-opacity="0.55" />
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#38bdf8" flood-opacity="0.25" />
+    </filter>
+
+    <filter id="glowBlur" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="38" />
+    </filter>
+
+    <filter id="dropGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.45" />
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#38bdf8" flood-opacity="0.6" />
+    </filter>
+
+    <clipPath id="squircleClip">
+      <rect x="0" y="0" width="512" height="512" rx="118" ry="118" />
+    </clipPath>
+
+    <clipPath id="noteClip">
+      <rect x="116" y="86" width="280" height="340" rx="36" ry="36" />
+    </clipPath>
+  </defs>
+
+  <!-- ── Base Squircle Container ── -->
+  <g clip-path="url(#squircleClip)">
+    <!-- Dark Cosmic Backdrop -->
+    <rect width="512" height="512" fill="url(#bgGrad)" />
+
+    <!-- Outer Rim Refractive Border -->
+    <rect x="1" y="1" width="510" height="510" rx="117" ry="117" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="2" />
+
+    <!-- ── Ambient Liquid Caustic Lights Behind Glass ── -->
+    <!-- Cyan blob bottom-left -->
+    <circle cx="150" cy="390" r="130" fill="url(#cyanAura)" filter="url(#glowBlur)" />
+    <!-- Purple/violet blob top-right -->
+    <circle cx="360" cy="140" r="140" fill="url(#purpleAura)" filter="url(#glowBlur)" />
+    <!-- Coral/magenta splash center-right -->
+    <circle cx="390" cy="320" r="90" fill="url(#pinkAura)" filter="url(#glowBlur)" />
+
+    <!-- ── Liquid Flow Ribbon Under Glass ── -->
+    <path d="M 60 360 C 140 300, 220 420, 320 340 C 380 290, 440 320, 470 280"
+          fill="none" stroke="#38bdf8" stroke-width="28" stroke-linecap="round" opacity="0.35" filter="url(#glowBlur)" />
+    <path d="M 120 180 C 200 120, 300 240, 420 160"
+          fill="none" stroke="#c084fc" stroke-width="22" stroke-linecap="round" opacity="0.4" filter="url(#glowBlur)" />
+
+    <!-- ── The Central Liquid Glass Note Slab ── -->
+    <g filter="url(#glassShadow)">
+      <!-- Main Note Body -->
+      <rect x="116" y="86" width="280" height="340" rx="36" ry="36"
+            fill="url(#glassSlab)"
+            stroke="url(#glassBorder)"
+            stroke-width="3" />
+
+      <!-- Internal Glass Clip for Sheen & Notes Content -->
+      <g clip-path="url(#noteClip)">
+        <!-- Diagonal Specular Glass Reflection Sweep -->
+        <path d="M 70 80 L 340 80 L 190 440 L 70 440 Z" fill="url(#specularSheen)" opacity="0.8" />
+        
+        <!-- Top Horizontal Glass Bevel Highlight -->
+        <line x1="126" y1="88" x2="386" y2="88" stroke="#ffffff" stroke-width="2" stroke-linecap="round" opacity="0.85" />
+        <line x1="118" y1="96" x2="118" y2="390" stroke="#ffffff" stroke-width="2" stroke-linecap="round" opacity="0.65" />
+
+        <!-- ── Note Lines & Content ── -->
+        <!-- Note Header Pill (Liquid Neon Accent) -->
+        <rect x="156" y="132" width="120" height="18" rx="9" fill="url(#noteLine1)" />
+        <circle cx="342" cy="141" r="9" fill="#38bdf8" opacity="0.9" />
+
+        <!-- Note Horizontal Ruler / Divider -->
+        <line x1="156" y1="174" x2="356" y2="174" stroke="rgba(255,255,255,0.22)" stroke-width="2" stroke-linecap="round" />
+
+        <!-- Bullet Point 1 & Line 1 -->
+        <circle cx="166" cy="214" r="6" fill="#38bdf8" />
+        <rect x="186" y="206" width="160" height="15" rx="7.5" fill="url(#noteLine2)" />
+
+        <!-- Bullet Point 2 & Line 2 -->
+        <circle cx="166" cy="256" r="6" fill="#818cf8" />
+        <rect x="186" y="248" width="135" height="15" rx="7.5" fill="url(#noteLine2)" opacity="0.85" />
+
+        <!-- Bullet Point 3 & Line 3 -->
+        <circle cx="166" cy="298" r="6" fill="#c084fc" />
+        <rect x="186" y="290" width="150" height="15" rx="7.5" fill="url(#noteLine2)" opacity="0.7" />
+
+        <!-- Line 4 (Sub-note) -->
+        <rect x="186" y="332" width="95" height="13" rx="6.5" fill="url(#noteLine2)" opacity="0.5" />
+
+        <!-- Liquid Wave Pattern at Bottom of Note -->
+        <path d="M 116 385 Q 186 365, 256 385 T 396 385 L 396 426 L 116 426 Z"
+              fill="rgba(56, 189, 248, 0.15)" />
+        <path d="M 116 395 Q 186 415, 256 395 T 396 395 L 396 426 L 116 426 Z"
+              fill="rgba(192, 132, 252, 0.2)" />
+      </g>
+    </g>
+
+    <!-- ── Floating 3D Liquid Glass Droplets ── -->
+    <!-- Large Liquid Drop (Bottom-Right Overflowing Edge) -->
+    <g filter="url(#dropGlow)">
+      <circle cx="380" cy="385" r="34" fill="url(#dropHighlight)" stroke="#ffffff" stroke-width="2.5" />
+      <!-- Inner refraction bead -->
+      <ellipse cx="372" cy="374" rx="10" ry="6" fill="#ffffff" opacity="0.85" transform="rotate(-30 372 374)" />
+      <circle cx="390" cy="396" r="5" fill="#38bdf8" opacity="0.75" />
+    </g>
+
+    <!-- Small Liquid Drop (Top-Left) -->
+    <g filter="url(#dropGlow)">
+      <circle cx="128" cy="118" r="16" fill="url(#dropHighlight)" stroke="#ffffff" stroke-width="1.8" />
+      <ellipse cx="124" cy="113" rx="5" ry="3" fill="#ffffff" opacity="0.9" transform="rotate(-25 124 113)" />
+    </g>
+
+    <!-- Micro Drop (Bottom) -->
+    <circle cx="340" cy="430" r="8" fill="#38bdf8" opacity="0.8" />
+    <circle cx="338" cy="428" r="2.5" fill="#ffffff" />
+
+    <!-- ── Radiant AI Magic Sparkle (Liquid Star) ── -->
+    <g transform="translate(385, 95)" filter="url(#dropGlow)">
+      <!-- 4-point glass diamond star -->
+      <path d="M 0 -24 Q 0 0, 24 0 Q 0 0, 0 24 Q 0 0, -24 0 Q 0 0, 0 -24 Z"
+            fill="url(#noteLine1)" stroke="#ffffff" stroke-width="1.5" />
+      <circle cx="0" cy="0" r="5" fill="#ffffff" />
+    </g>
+
+    <!-- Top Corner Gloss Arc across entire squircle -->
+    <path d="M 0 0 L 260 0 C 160 120, 80 180, 0 220 Z"
+          fill="url(#specularSheen)" opacity="0.45" />
+  </g>
+</svg>

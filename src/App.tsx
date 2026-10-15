@@ -758,6 +758,61 @@ function App() {
     };
   }, []);
 
+  // ── PWA App Installation ────────────────────────────────────────────────
+  const [installPromptEvent, setInstallPromptEvent] = useState<any>(null);
+  const [isAppInstalled, setIsAppInstalled] = useState(false);
+
+  useEffect(() => {
+    const handleBeforeInstall = (e: Event) => {
+      e.preventDefault();
+      setInstallPromptEvent(e);
+    };
+    window.addEventListener('beforeinstallprompt', handleBeforeInstall);
+
+    const checkInstalled = () => {
+      if (
+        window.matchMedia('(display-mode: standalone)').matches ||
+        (window.navigator as any).standalone === true
+      ) {
+        setIsAppInstalled(true);
+      }
+    };
+    checkInstalled();
+
+    const handleAppInstalled = () => {
+      setIsAppInstalled(true);
+      setInstallPromptEvent(null);
+    };
+    window.addEventListener('appinstalled', handleAppInstalled);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
+      window.removeEventListener('appinstalled', handleAppInstalled);
+    };
+  }, []);
+
+  const handleInstallApp = async () => {
+    if (installPromptEvent) {
+      try {
+        await installPromptEvent.prompt();
+        const choice = await installPromptEvent.userChoice;
+        if (choice && choice.outcome === 'accepted') {
+          setIsAppInstalled(true);
+        }
+      } catch (err) {
+        console.warn('Install prompt error:', err);
+      }
+      setInstallPromptEvent(null);
+    } else {
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+      if (isIOS) {
+        alert('📱 To Install FatNotes on iPhone/iPad:\n\n1. Tap the Share button (square with arrow) at the bottom.\n2. Scroll down and tap "Add to Home Screen".\n3. Tap "Add" in the top right.\n\nThe Liquid Glass Notes app will appear on your home screen!');
+      } else {
+        alert('💻 To Install FatNotes:\n\n• In Chrome/Edge: Click the "Install" icon in your address bar (top right) or open menu (⋮) → "Install FatNotes".\n• On Android: Open browser menu (⋮) → "Install app" or "Add to Home screen".');
+      }
+    }
+  };
+
   // ── AI Verification Audit State ─────────────────────────────────────────
   const [auditMetadata, setAuditMetadata] = useState<AuditMetadata | null>(null);
   const [showAuditDrawer, setShowAuditDrawer] = useState<boolean>(false);
@@ -1772,6 +1827,42 @@ function App() {
                 </div>
               </div>
 
+              {/* ── Liquid Glass App Installation (PWA) ─── */}
+              <div className="install-pwa-card">
+                <div className="install-pwa-preview">
+                  <div className="install-pwa-icon-glow"></div>
+                  <img src="/icons/icon-192.png" alt="Liquid Glass Notes Logo" className="install-pwa-logo" />
+                </div>
+                <div className="install-pwa-details">
+                  <div className="install-pwa-title">
+                    <span>FatNotes App</span>
+                    <span className={`install-pwa-badge ${isAppInstalled ? 'installed' : ''}`}>
+                      {isAppInstalled ? 'INSTALLED' : 'PWA READY'}
+                    </span>
+                  </div>
+                  <p className="install-pwa-desc">
+                    Install FatNotes with the <strong>Liquid Glass Notes</strong> logo for instant offline access and fullscreen immersion on your phone or desktop.
+                  </p>
+                  <button
+                    type="button"
+                    className={`install-pwa-btn ${isAppInstalled ? 'installed' : ''}`}
+                    onClick={handleInstallApp}
+                  >
+                    {isAppInstalled ? (
+                      <>
+                        <CheckCircle2 size={15} />
+                        <span>Running as Installed App</span>
+                      </>
+                    ) : (
+                      <>
+                        <Download size={15} />
+                        <span>Install FatNotes App</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+
               {/* ── Glass Customization ─── */}
               <div className="glass-controls">
                 <h4 style={{ marginTop: '1.5rem', marginBottom: '0.75rem', color: 'rgba(255,255,255,0.9)' }}>Glass Appearance</h4>
@@ -1821,14 +1912,27 @@ function App() {
           onChange={setMobileTab}
           hasNewContent={Boolean(content && content !== DEFAULT_NOTE)}
         />
-        <button
-          type="button"
-          className="mobile-settings-btn"
-          onClick={() => setShowSettings(!showSettings)}
-          aria-label="Settings"
-        >
-          <Settings size={18} />
-        </button>
+        <div className="mobile-header-actions">
+          {!isAppInstalled && (
+            <button
+              type="button"
+              className="mobile-install-btn"
+              onClick={handleInstallApp}
+              title="Install FatNotes App (Liquid Glass Icon)"
+              aria-label="Install App"
+            >
+              <Download size={16} />
+            </button>
+          )}
+          <button
+            type="button"
+            className="mobile-settings-btn"
+            onClick={() => setShowSettings(!showSettings)}
+            aria-label="Settings"
+          >
+            <Settings size={18} />
+          </button>
+        </div>
       </div>
 
       {/* ── Main Content ───────────────────────────────────────────────── */}
@@ -1855,7 +1959,21 @@ function App() {
                 )}
               </span>
             </div>
-            <SettingsIconButton onClick={() => setShowSettings(!showSettings)} />
+            <div className="header-actions-group">
+              {!isAppInstalled && (
+                <button
+                  type="button"
+                  className="install-app-header-btn"
+                  onClick={handleInstallApp}
+                  title="Install FatNotes App (Liquid Glass Icon)"
+                  aria-label="Install FatNotes App"
+                >
+                  <Download size={14} />
+                  <span>Install App</span>
+                </button>
+              )}
+              <SettingsIconButton onClick={() => setShowSettings(!showSettings)} />
+            </div>
           </div>
 
           <div className="generator-form">
