@@ -47,10 +47,10 @@
 .qp-tab-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  padding: 0.32rem 0.75rem;
+  gap: clamp(0.2rem, 0.4vw, 0.35rem);
+  padding: clamp(0.25rem, 0.4vw + 0.12rem, 0.4rem) clamp(0.5rem, 0.8vw + 0.25rem, 0.85rem);
   border-radius: 999px;
-  font-size: 0.78rem;
+  font-size: clamp(0.72rem, 0.35vw + 0.58rem, 0.85rem);
   font-weight: 600;
   color: #2c3e50;
   border: none;
@@ -76,12 +76,12 @@
 .qp-theme-select-wrap {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: clamp(0.25rem, 0.4vw, 0.4rem);
   background: rgba(255, 255, 255, 0.35);
   border: 1px solid rgba(255, 255, 255, 0.6);
-  padding: 0.22rem 0.55rem;
+  padding: clamp(0.18rem, 0.4vw + 0.08rem, 0.32rem) clamp(0.45rem, 0.7vw + 0.2rem, 0.7rem);
   border-radius: 999px;
-  font-size: 0.78rem;
+  font-size: clamp(0.72rem, 0.35vw + 0.58rem, 0.84rem);
   font-weight: 600;
   color: #1e293b;
 }
@@ -89,7 +89,7 @@
 .qp-theme-select {
   border: none;
   background: transparent;
-  font-size: 0.78rem;
+  font-size: clamp(0.72rem, 0.35vw + 0.58rem, 0.84rem);
   font-weight: 700;
   color: #0f172a;
   cursor: pointer;
@@ -100,14 +100,21 @@
 .qp-action-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  padding: 0.35rem 0.75rem;
+  gap: clamp(0.25rem, 0.5vw, 0.4rem);
+  padding: clamp(0.28rem, 0.5vw + 0.12rem, 0.48rem) clamp(0.55rem, 0.9vw + 0.25rem, 0.95rem);
+  min-height: clamp(32px, 3.2vw + 12px, 40px);
   border-radius: 999px;
-  font-size: 0.78rem;
+  font-size: clamp(0.72rem, 0.35vw + 0.58rem, 0.85rem);
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
   border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.qp-action-btn svg {
+  width: clamp(13px, 0.8vw + 8px, 16px);
+  height: clamp(13px, 0.8vw + 8px, 16px);
+  flex-shrink: 0;
 }
 
 .qp-action-btn.secondary {
@@ -459,35 +466,37 @@
 /* ─── Question Content & Markdown Typography ──────────────────────────── */
 .qp-content {
   position: relative;
+  font-size: clamp(0.82rem, 0.45vw + 0.68rem, 1.05rem);
+  line-height: clamp(1.48, 0.2vw + 1.45, 1.7);
 }
 
 .qp-content p {
-  margin-bottom: 0.85rem;
+  margin-bottom: clamp(0.5rem, 1vw, 0.85rem);
 }
 
 .qp-content h1,
 .qp-content h2,
 .qp-content h3 {
-  margin-top: 1.5rem;
-  margin-bottom: 0.6rem;
+  margin-top: clamp(1rem, 1.8vw, 1.8rem);
+  margin-bottom: clamp(0.35rem, 0.8vw, 0.6rem);
   line-height: 1.3;
 }
 
 .qp-content h1 {
-  font-size: 1.45rem;
+  font-size: clamp(1.15rem, 1.5vw + 0.8rem, 1.65rem);
   text-align: center;
   border-bottom: 2px solid currentColor;
   padding-bottom: 0.4rem;
 }
 
 .qp-content h2 {
-  font-size: 1.2rem;
-  margin-top: 1.8rem;
+  font-size: clamp(1.02rem, 1.1vw + 0.72rem, 1.38rem);
+  margin-top: clamp(1.1rem, 2vw, 1.8rem);
   padding-bottom: 0.25rem;
 }
 
 .qp-content h3 {
-  font-size: 1.05rem;
+  font-size: clamp(0.92rem, 0.8vw + 0.68rem, 1.22rem);
 }
 
 .qp-content ul,

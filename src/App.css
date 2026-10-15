@@ -1,3 +1,34 @@
+/* ==========================================================================
+   DYNAMIC FLUID AUTO-RESIZABLE SCALING ENGINE
+   Seamlessly scales text, buttons, inputs, icons & paddings across all screen sizes
+   ========================================================================== */
+:root {
+  /* Fluid Button Dimensions & Scaling */
+  --btn-fluid-h: clamp(38px, 4.2vw + 14px, 58px);
+  --btn-fluid-sm-h: clamp(32px, 3.2vw + 12px, 42px);
+  --btn-fluid-pad-y: clamp(0.35rem, 0.7vw + 0.18rem, 0.85rem);
+  --btn-fluid-pad-x: clamp(0.6rem, 1.3vw + 0.35rem, 1.4rem);
+  --btn-fluid-radius: clamp(14px, 1.8vw + 8px, 26px);
+  --btn-fluid-font: clamp(0.78rem, 0.55vw + 0.65rem, 1.05rem);
+  --btn-fluid-sm-font: clamp(0.72rem, 0.4vw + 0.6rem, 0.88rem);
+
+  /* Fluid Typography */
+  --font-fluid-title: clamp(0.85rem, 0.9vw + 0.62rem, 1.25rem);
+  --font-fluid-label: clamp(0.76rem, 0.5vw + 0.62rem, 0.98rem);
+  --font-fluid-body: clamp(0.82rem, 0.45vw + 0.68rem, 1.02rem);
+  --font-fluid-input: clamp(0.84rem, 0.5vw + 0.7rem, 1.05rem);
+  --font-fluid-badge: clamp(0.66rem, 0.35vw + 0.56rem, 0.82rem);
+  --font-fluid-h1: clamp(1.2rem, 1.8vw + 0.8rem, 1.95rem);
+  --font-fluid-h2: clamp(1.02rem, 1.2vw + 0.72rem, 1.55rem);
+  --font-fluid-h3: clamp(0.92rem, 0.8vw + 0.68rem, 1.28rem);
+
+  /* Fluid UI Navigation & Spacing */
+  --nav-fluid-h: clamp(40px, 4.4vw + 16px, 50px);
+  --icon-fluid-sz: clamp(14px, 1vw + 10px, 18px);
+  --panel-pad-x: clamp(0.65rem, 1.8vw + 0.2rem, 1.35rem);
+  --panel-pad-y: clamp(0.65rem, 1.5vw + 0.2rem, 1.15rem);
+}
+
 /* Layout */
 .app-container {
   position: relative;
@@ -989,17 +1020,24 @@
 }
 
 .btn-primary {
-  min-height: 38px;
-  padding: 0.55rem 0.95rem;
+  min-height: var(--btn-fluid-sm-h);
+  padding: clamp(0.28rem, 0.6vw + 0.12rem, 0.55rem) clamp(0.65rem, 1.1vw + 0.35rem, 1.15rem);
   border-radius: 999px;
   color: #2f62ff;
-  font-size: 0.84rem;
+  font-size: var(--btn-fluid-sm-font);
+  gap: clamp(0.25rem, 0.5vw, 0.45rem);
+}
+
+.btn-primary svg {
+  width: var(--icon-fluid-sz);
+  height: var(--icon-fluid-sz);
+  flex-shrink: 0;
 }
 
 .btn-outline {
-  width: 36px;
-  height: 36px;
-  min-width: 36px;
+  width: var(--btn-fluid-sm-h);
+  height: var(--btn-fluid-sm-h);
+  min-width: var(--btn-fluid-sm-h);
   border-radius: 50%;
   color: #344353;
 }
@@ -1038,12 +1076,19 @@
 
 .btn-generate {
   width: 100%;
-  min-height: 58px;
-  padding: 0.95rem 1.1rem;
-  border-radius: 24px;
+  min-height: var(--btn-fluid-h);
+  padding: var(--btn-fluid-pad-y) var(--btn-fluid-pad-x);
+  border-radius: var(--btn-fluid-radius);
   color: #1d2b38;
-  font-size: 1rem;
+  font-size: var(--btn-fluid-font);
+  gap: clamp(0.35rem, 0.8vw, 0.65rem);
   text-align: center;
+}
+
+.btn-generate svg {
+  width: clamp(16px, 1.2vw + 11px, 22px);
+  height: clamp(16px, 1.2vw + 11px, 22px);
+  flex-shrink: 0;
 }
 
 .btn-generate::before {
@@ -2222,30 +2267,56 @@ textarea:focus-visible {
   letter-spacing: -0.01em;
 }
 
-/* Fine-tune panel title and button typography for Inter */
+/* Fine-tune panel title and button typography with fluid auto-resizing */
 .panel-title {
-  font-size: 1.05rem !important;
+  font-size: var(--font-fluid-title) !important;
   font-weight: 700 !important;
+  gap: clamp(0.32rem, 0.7vw, 0.65rem) !important;
+}
+
+.panel-title svg {
+  width: clamp(14px, 0.8vw + 10px, 19px) !important;
+  height: clamp(14px, 0.8vw + 10px, 19px) !important;
+  flex-shrink: 0;
 }
 
 .form-section label {
-  font-size: 0.95rem !important;
+  font-size: var(--font-fluid-label) !important;
   font-weight: 600 !important;
 }
 
 .btn-generate {
-  font-size: 1.02rem !important;
+  font-size: var(--btn-fluid-font) !important;
+  min-height: var(--btn-fluid-h) !important;
+  padding: var(--btn-fluid-pad-y) var(--btn-fluid-pad-x) !important;
+  border-radius: var(--btn-fluid-radius) !important;
   font-weight: 700 !important;
   letter-spacing: -0.01em !important;
+  gap: clamp(0.35rem, 0.8vw, 0.65rem) !important;
+}
+
+.btn-generate svg {
+  width: clamp(16px, 1.2vw + 11px, 22px) !important;
+  height: clamp(16px, 1.2vw + 11px, 22px) !important;
+  flex-shrink: 0;
 }
 
 .btn-primary {
-  font-size: 0.88rem !important;
+  font-size: var(--btn-fluid-sm-font) !important;
+  min-height: var(--btn-fluid-sm-h) !important;
+  padding: clamp(0.28rem, 0.6vw + 0.12rem, 0.55rem) clamp(0.65rem, 1.1vw + 0.35rem, 1.15rem) !important;
   font-weight: 700 !important;
+  gap: clamp(0.25rem, 0.5vw, 0.45rem) !important;
+}
+
+.btn-primary svg {
+  width: var(--icon-fluid-sz) !important;
+  height: var(--icon-fluid-sz) !important;
+  flex-shrink: 0;
 }
 
 .audit-badge-title {
-  font-size: 0.92rem !important;
+  font-size: var(--font-fluid-badge) !important;
   font-weight: 700 !important;
 }
 
@@ -2284,6 +2355,44 @@ textarea:focus-visible {
 .note-card code *,
 .note-card pre * {
   font-family: "Cascadia Code", Consolas, monospace !important;
+}
+
+/* Fluid Auto-Resizable Note Content Typography */
+.note-card-inner {
+  font-size: var(--font-fluid-body) !important;
+  line-height: clamp(1.48, 0.25vw + 1.45, 1.72) !important;
+}
+
+.note-card-inner h1 {
+  font-size: var(--font-fluid-h1) !important;
+  line-height: 1.22 !important;
+  margin-bottom: clamp(0.45rem, 1vw, 0.95rem) !important;
+}
+
+.note-card-inner h2 {
+  font-size: var(--font-fluid-h2) !important;
+  line-height: 1.28 !important;
+  margin-top: clamp(0.8rem, 1.3vw, 1.45rem) !important;
+  margin-bottom: clamp(0.32rem, 0.7vw, 0.7rem) !important;
+}
+
+.note-card-inner h3 {
+  font-size: var(--font-fluid-h3) !important;
+  line-height: 1.32 !important;
+}
+
+.note-card-inner p,
+.note-card-inner li {
+  font-size: var(--font-fluid-body) !important;
+}
+
+.note-card-inner blockquote {
+  font-size: var(--font-fluid-body) !important;
+  padding: clamp(0.45rem, 0.8vw + 0.2rem, 0.85rem) clamp(0.65rem, 1vw + 0.35rem, 1.15rem) !important;
+}
+
+.note-card-inner table {
+  font-size: clamp(0.74rem, 0.4vw + 0.6rem, 0.92rem) !important;
 }
 
 /* ==========================================================================

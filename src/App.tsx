@@ -380,18 +380,6 @@ const PROVIDER_META = {
   openrouter: { label: 'OpenRouter', Icon: BookOpen,  hue: 200, accent: '#0ea5e9' },
 } as const;
 
-// Pill dimensions — must match CSS
-const LPS_W = 334;
-const LPS_KNOB_W = 104; // Wide pill shape instead of small circle
-const LPS_TAB_W = LPS_W / 3;
-
-// Pixel x-positions (left edge of knob) for each provider
-const LPS_POSITIONS: Record<AIProvider, number> = {
-  gemini:     LPS_TAB_W * 0.5 - LPS_KNOB_W / 2,  // ~3.6
-  groq:       LPS_TAB_W * 1.5 - LPS_KNOB_W / 2,  // ~115
-  openrouter: LPS_TAB_W * 2.5 - LPS_KNOB_W / 2,  // ~226.3
-};
-
 function LiquidProviderSwitch({
   provider,
   onChange,
@@ -399,21 +387,47 @@ function LiquidProviderSwitch({
   provider: AIProvider;
   onChange: (p: AIProvider) => void;
 }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [trackWidth, setTrackWidth] = useState(334);
   const [pressed, setPressed] = useState(false);
   const [clicked, setClicked] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const updateSize = () => {
+      if (containerRef.current) {
+        setTrackWidth(containerRef.current.clientWidth);
+      }
+    };
+    updateSize();
+    const ro = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.contentRect.width > 0) {
+          setTrackWidth(entry.contentRect.width);
+        }
+      }
+    });
+    ro.observe(containerRef.current);
+    return () => ro.disconnect();
+  }, []);
+
+  useEffect(() => {
     if (!clicked) return;
     const t = window.setTimeout(() => setClicked(false), 350); // Matches spring duration
     return () => window.clearTimeout(t);
   }, [clicked]);
 
   const { hue } = PROVIDER_META[provider];
-  
   const isMoving = pressed || clicked;
+
+  const tabWidth = trackWidth / 3;
+  const knobWidth = Math.max(76, Math.floor(tabWidth - 6));
+  const providerIndex = PROVIDERS.indexOf(provider);
+  const posX = Math.max(3, Math.min(trackWidth - knobWidth - 3, Math.round(tabWidth * (providerIndex + 0.5) - knobWidth / 2)));
 
   return (
     <div
+      ref={containerRef}
       className="lps-root"
       role="group"
       aria-label="AI Provider"
@@ -431,7 +445,8 @@ function LiquidProviderSwitch({
         <motion.div
           className="lps-blob-goo"
           animate={{ 
-            x: LPS_POSITIONS[provider],
+            x: posX,
+            width: knobWidth,
             backgroundColor: isMoving ? 'rgba(210, 215, 220, 0.95)' : 'rgba(255, 255, 255, 1)', // Grey when moving
             scaleX: isMoving ? 1.7 : 1, // massive stretch tail
             scaleY: isMoving ? 1.6 : 1  // Massive vertical bulge to overflow the 48px track
@@ -469,7 +484,8 @@ function LiquidProviderSwitch({
       <motion.div
         className="lps-blob-lens"
         animate={{ 
-          x: LPS_POSITIONS[provider],
+          x: posX,
+          width: knobWidth,
           scaleX: isMoving ? 1.4 : 1, // Stretch the lens
           scaleY: isMoving ? 1.4 : 1  // Refractive lens bulges vertically too
         }}
@@ -502,12 +518,15 @@ function LiquidModeSwitch({
       }
     };
     updateSize();
-    window.addEventListener('resize', updateSize);
-    window.addEventListener('orientationchange', updateSize);
-    return () => {
-      window.removeEventListener('resize', updateSize);
-      window.removeEventListener('orientationchange', updateSize);
-    };
+    const ro = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.contentRect.width > 0) {
+          setTrackWidth(entry.contentRect.width);
+        }
+      }
+    });
+    ro.observe(containerRef.current);
+    return () => ro.disconnect();
   }, []);
 
   useEffect(() => {
