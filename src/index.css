@@ -29,6 +29,12 @@
   --shadow-glow: 0 0 30px rgba(79, 70, 229, 0.1);
 }
 
+html {
+  font-size: clamp(14px, 0.35vw + 13px, 17.5px);
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
