@@ -620,6 +620,26 @@ function App() {
   const [noteTopic, setNoteTopic] = useState('AI_Study_Notes');
   const [mobileTab, setMobileTab] = useState<'generator' | 'preview'>('generator');
 
+  // ── Smart Dynamic Screen Size & Orientation Detection ──────────────────
+  const [isCompactScreen, setIsCompactScreen] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.innerWidth <= 960 || (window.innerWidth <= 1100 && window.innerHeight > window.innerWidth);
+  });
+
+  useEffect(() => {
+    const handleScreenResize = () => {
+      const compact = window.innerWidth <= 960 || (window.innerWidth <= 1100 && window.innerHeight > window.innerWidth);
+      setIsCompactScreen(compact);
+    };
+
+    window.addEventListener('resize', handleScreenResize);
+    window.addEventListener('orientationchange', handleScreenResize);
+    return () => {
+      window.removeEventListener('resize', handleScreenResize);
+      window.removeEventListener('orientationchange', handleScreenResize);
+    };
+  }, []);
+
   // ── AI Verification Audit State ─────────────────────────────────────────
   const [auditMetadata, setAuditMetadata] = useState<AuditMetadata | null>(null);
   const [showAuditDrawer, setShowAuditDrawer] = useState<boolean>(false);
@@ -1712,7 +1732,7 @@ function App() {
       {/* ── Main Content ───────────────────────────────────────────────── */}
       <main className="main-content">
         <motion.div
-          className={`editor-panel generator-panel ${mobileTab !== 'generator' ? 'mobile-hidden' : ''}`}
+          className={`editor-panel generator-panel ${isCompactScreen && mobileTab !== 'generator' ? 'mobile-hidden' : ''}`}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
@@ -1877,7 +1897,7 @@ function App() {
 
         {/* ── Preview Panel (Auto-Detects Question Papers vs Notes) ─────────────────── */}
         <motion.div
-          className={`preview-panel ${mobileTab !== 'preview' ? 'mobile-hidden' : ''}`}
+          className={`preview-panel ${isCompactScreen && mobileTab !== 'preview' ? 'mobile-hidden' : ''}`}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
@@ -1971,21 +1991,23 @@ function App() {
               rawContent={content}
               paperTitle={noteTopic}
               isGenerating={isGenerating}
-              onBackToEditor={() => setMobileTab('generator')}
+              onBackToEditor={isCompactScreen ? () => setMobileTab('generator') : undefined}
             />
           ) : (
             <>
               <div className="panel-header preview-header">
                 <div className="panel-title">
-                  <button
-                    type="button"
-                    className="mobile-back-to-gen-btn"
-                    onClick={() => setMobileTab('generator')}
-                    title="Back to Generator"
-                  >
-                    <ChevronLeft size={16} />
-                    <span>Edit</span>
-                  </button>
+                  {isCompactScreen && (
+                    <button
+                      type="button"
+                      className="mobile-back-to-gen-btn"
+                      onClick={() => setMobileTab('generator')}
+                      title="Back to Generator"
+                    >
+                      <ChevronLeft size={16} />
+                      <span>Edit</span>
+                    </button>
+                  )}
                   <Sparkles size={16} />
                   <span>Aesthetic Note Output</span>
                 </div>
