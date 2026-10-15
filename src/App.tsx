@@ -568,9 +568,9 @@ function LiquidModeSwitch({
           animate={{
             x: posX,
             width: knobWidth,
-            backgroundColor: isMoving ? 'rgba(210, 218, 226, 0.95)' : 'rgba(255, 255, 255, 1)',
-            scaleX: isMoving ? 1.55 : 1,
-            scaleY: isMoving ? 1.45 : 1,
+            backgroundColor: isMoving ? 'rgba(255, 255, 255, 0.42)' : 'rgba(255, 255, 255, 0.26)',
+            scaleX: isMoving ? 1.35 : 1,
+            scaleY: isMoving ? 1.25 : 1,
           }}
           transition={{ type: 'spring', stiffness: 380, damping: 28 }}
           style={{ y: '-50%', originX: 0.5, originY: 0.5 }}
@@ -594,7 +594,7 @@ function LiquidModeSwitch({
         onTouchEnd={() => setPressed(false)}
         aria-pressed={mode === 'generator'}
       >
-        <FileText size={14} />
+        <FileText size={13} />
         <span>Generator</span>
       </button>
 
@@ -614,7 +614,7 @@ function LiquidModeSwitch({
         onTouchEnd={() => setPressed(false)}
         aria-pressed={mode === 'preview'}
       >
-        <Sparkles size={14} />
+        <Sparkles size={13} />
         <span>Notes Preview</span>
         {hasNewContent && <span className="mobile-nav-dot" title="Generated notes ready" />}
       </button>
@@ -625,8 +625,8 @@ function LiquidModeSwitch({
         animate={{
           x: posX,
           width: knobWidth,
-          scaleX: isMoving ? 1.35 : 1,
-          scaleY: isMoving ? 1.3 : 1,
+          scaleX: isMoving ? 1.25 : 1,
+          scaleY: isMoving ? 1.2 : 1,
         }}
         transition={{ type: 'spring', stiffness: 380, damping: 28 }}
         style={{ y: '-50%' }}
@@ -668,7 +668,7 @@ declare global {
 let cachedGeminiModel: string | null = null;
 const getAvailableGeminiModel = async (apiKey: string): Promise<string> => {
   if (cachedGeminiModel) return cachedGeminiModel;
-  let targetModel = 'gemini-1.5-flash';
+  let targetModel = 'gemini-2.0-flash';
   try {
     const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
     if (res.ok) {
@@ -676,9 +676,12 @@ const getAvailableGeminiModel = async (apiKey: string): Promise<string> => {
       const supported = (data.models || []).filter((m: any) => 
         m.supportedGenerationMethods?.includes('generateContent') && m.name.includes('gemini')
       );
-      const preferred = supported.find((m: any) => m.name.includes('gemini-1.5-flash-latest'))
-                     || supported.find((m: any) => m.name.includes('gemini-1.5-flash'))
+      const preferred = supported.find((m: any) => m.name.includes('gemini-2.5-flash'))
+                     || supported.find((m: any) => m.name.includes('gemini-2.0-flash') && !m.name.includes('exp'))
                      || supported.find((m: any) => m.name.includes('gemini-2.0-flash'))
+                     || supported.find((m: any) => m.name.includes('gemini-1.5-flash-latest'))
+                     || supported.find((m: any) => m.name.includes('gemini-1.5-flash'))
+                     || supported.find((m: any) => m.name.includes('gemini-2.0-pro-exp'))
                      || supported.find((m: any) => m.name.includes('gemini-1.5-pro'))
                      || supported[0];
       if (preferred) targetModel = preferred.name.replace('models/', '');

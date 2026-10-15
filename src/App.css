@@ -45,8 +45,8 @@
   inset: 0;
   pointer-events: none;
   background:
-    linear-gradient(115deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02) 42%, rgba(31, 84, 108, 0.08)),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(21, 35, 52, 0.08));
+    linear-gradient(115deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.06) 42%, rgba(31, 84, 108, 0.12)),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(21, 35, 52, 0.10));
 }
 
 .main-content {
@@ -1595,8 +1595,8 @@
   z-index: -1 !important;
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.10) 0%,
-    rgba(255, 255, 255, 0.03) 30%,
+    rgba(255, 255, 255, 0.25) 0%,
+    rgba(255, 255, 255, 0.05) 30%,
     rgba(255, 255, 255, 0.0) 60%
   ) !important;
   pointer-events: none !important;
@@ -2670,24 +2670,24 @@ button:focus-visible,
   /* ── Liquid Glass Mode Switcher (Expanding Knob & Specular Refraction) ── */
   .lms-root {
     flex: 1;
-    max-width: 360px;
-    height: 44px;
+    max-width: 275px;
+    height: 38px;
     position: relative;
     border-radius: 999px;
-    border: 1px solid rgba(255, 255, 255, 0.65);
-    background: rgba(255, 255, 255, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    background: rgba(255, 255, 255, 0.14);
     box-shadow:
-      0 8px 24px rgba(28, 45, 65, 0.08),
-      inset 0 1px 0 rgba(255, 255, 255, 0.85);
-    -webkit-backdrop-filter: blur(20px) saturate(1.6);
-    backdrop-filter: blur(20px) saturate(1.6);
+      0 6px 20px rgba(15, 23, 42, 0.08),
+      inset 0 1px 1px rgba(255, 255, 255, 0.7);
+    -webkit-backdrop-filter: blur(24px) saturate(1.8);
+    backdrop-filter: blur(24px) saturate(1.8);
     isolation: isolate;
     transition: background 0.3s ease, box-shadow 0.3s ease;
   }
 
   .lms-root.is-moving {
-    background: rgba(220, 225, 230, 0.65);
-    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.08);
+    background: rgba(255, 255, 255, 0.22);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
   }
 
   .lms-liquids {
@@ -2708,25 +2708,25 @@ button:focus-visible,
     position: absolute;
     top: 50%;
     left: 0;
-    height: 36px;
+    height: 30px;
     border-radius: 999px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   }
 
   .lms-blob-lens {
     position: absolute;
     top: 50%;
     left: 0;
-    height: 36px;
+    height: 30px;
     border-radius: 999px;
-    backdrop-filter: saturate(1.8) contrast(1.15) brightness(1.05);
-    -webkit-backdrop-filter: saturate(1.8) contrast(1.15) brightness(1.05);
-    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(14px) saturate(1.8) brightness(1.06);
+    -webkit-backdrop-filter: blur(14px) saturate(1.8) brightness(1.06);
+    background: rgba(255, 255, 255, 0.24);
     box-shadow:
-      inset 0 1.5px 1px rgba(255, 255, 255, 0.95),
-      inset 0 -1px 2px rgba(255, 255, 255, 0.45),
-      inset 0 4px 12px rgba(255, 255, 255, 0.35),
-      0 4px 14px rgba(0, 0, 0, 0.12);
+      inset 0 1.2px 1px rgba(255, 255, 255, 0.9),
+      inset 0 -1px 2px rgba(255, 255, 255, 0.25),
+      inset 0 3px 8px rgba(255, 255, 255, 0.35),
+      0 3px 10px rgba(0, 0, 0, 0.1);
     pointer-events: none;
     z-index: 10;
   }
@@ -2742,9 +2742,9 @@ button:focus-visible,
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.42rem;
+    gap: 0.35rem;
     font-family: 'Inter', sans-serif !important;
-    font-size: 0.82rem;
+    font-size: 0.76rem;
     font-weight: 600;
     color: #1e293b;
     cursor: pointer;
@@ -3058,47 +3058,10 @@ button:focus-visible,
   }
 }
 
-/* ── Wide Screens & Desktops (> 960px): Pristine uncompromised layout, proportions and dimensions ── */
-@media screen and (min-width: 961px) {
-  .app-container {
-    height: 100vh;
-    min-height: 100vh;
-    overflow: hidden;
-  }
-  .main-content {
+/* ── Wide Screens & Desktops: Guarantee side-by-side liquid glass panels ── */
+@media screen and (min-width: 961px) and (orientation: landscape), screen and (min-width: 1101px) {
+  .mobile-hidden {
     display: flex !important;
-    flex-direction: row !important;
-    gap: 1.1rem !important;
-    padding: 0.85rem 1rem 1rem !important;
-    overflow: hidden !important;
-    scroll-snap-type: none !important;
-    height: calc(100vh - 100px) !important;
-    flex: 1 !important;
-    touch-action: auto !important;
-  }
-  .generator-panel {
-    display: flex !important;
-    flex-direction: column !important;
-    flex: 0 0 45% !important;
-    width: auto !important;
-    min-width: 380px !important;
-    max-width: 580px !important;
-    height: 100% !important;
-    border-radius: 28px !important;
-    scroll-snap-align: none !important;
-    scroll-snap-stop: normal !important;
-  }
-  .preview-panel {
-    display: flex !important;
-    flex-direction: column !important;
-    flex: 1 !important;
-    width: auto !important;
-    min-width: 0 !important;
-    max-width: none !important;
-    height: 100% !important;
-    border-radius: 28px !important;
-    scroll-snap-align: none !important;
-    scroll-snap-stop: normal !important;
   }
   .mobile-nav-bar {
     display: none !important;
