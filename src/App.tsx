@@ -480,6 +480,124 @@ function LiquidProviderSwitch({
   );
 }
 
+function LiquidModeSwitch({
+  mode,
+  onChange,
+  hasNewContent,
+}: {
+  mode: 'generator' | 'preview';
+  onChange: (m: 'generator' | 'preview') => void;
+  hasNewContent?: boolean;
+}) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [trackWidth, setTrackWidth] = useState(280);
+  const [pressed, setPressed] = useState(false);
+  const [clicked, setClicked] = useState(false);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const updateSize = () => {
+      if (containerRef.current) {
+        setTrackWidth(containerRef.current.clientWidth);
+      }
+    };
+    updateSize();
+    window.addEventListener('resize', updateSize);
+    window.addEventListener('orientationchange', updateSize);
+    return () => {
+      window.removeEventListener('resize', updateSize);
+      window.removeEventListener('orientationchange', updateSize);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!clicked) return;
+    const t = window.setTimeout(() => setClicked(false), 360);
+    return () => window.clearTimeout(t);
+  }, [clicked]);
+
+  const isMoving = pressed || clicked;
+  const knobWidth = Math.max(90, Math.floor((trackWidth - 8) / 2));
+  const posX = mode === 'generator' ? 4 : Math.max(4, trackWidth - knobWidth - 4);
+
+  return (
+    <div
+      ref={containerRef}
+      className={`lms-root ${isMoving ? 'is-moving' : ''}`}
+      role="group"
+      aria-label="View Mode"
+    >
+      {/* ── Background Goo layer: Stretchy expanding liquid tail ── */}
+      <div className="lms-liquids" style={{ filter: 'url(#goo)' }}>
+        <div className="lms-ring" />
+        <motion.div
+          className="lms-blob-goo"
+          animate={{
+            x: posX,
+            width: knobWidth,
+            backgroundColor: isMoving ? 'rgba(210, 218, 226, 0.95)' : 'rgba(255, 255, 255, 1)',
+            scaleX: isMoving ? 1.55 : 1,
+            scaleY: isMoving ? 1.45 : 1,
+          }}
+          transition={{ type: 'spring', stiffness: 380, damping: 28 }}
+          style={{ y: '-50%', originX: 0.5, originY: 0.5 }}
+        />
+      </div>
+
+      {/* ── Clickable label buttons ── */}
+      <button
+        type="button"
+        id="mode-generator-btn"
+        className={`lms-btn lms-btn-0 ${mode === 'generator' ? 'active' : ''}`}
+        onClick={() => {
+          if (mode === 'generator') return;
+          onChange('generator');
+          setClicked(true);
+        }}
+        onMouseDown={() => setPressed(true)}
+        onMouseUp={() => setPressed(false)}
+        onMouseLeave={() => setPressed(false)}
+        aria-pressed={mode === 'generator'}
+      >
+        <FileText size={14} />
+        <span>Generator</span>
+      </button>
+
+      <button
+        type="button"
+        id="mode-preview-btn"
+        className={`lms-btn lms-btn-1 ${mode === 'preview' ? 'active' : ''}`}
+        onClick={() => {
+          if (mode === 'preview') return;
+          onChange('preview');
+          setClicked(true);
+        }}
+        onMouseDown={() => setPressed(true)}
+        onMouseUp={() => setPressed(false)}
+        onMouseLeave={() => setPressed(false)}
+        aria-pressed={mode === 'preview'}
+      >
+        <Sparkles size={14} />
+        <span>Notes Preview</span>
+        {hasNewContent && <span className="mobile-nav-dot" title="Generated notes ready" />}
+      </button>
+
+      {/* ── Refractive Liquid Glass Lens: Over the text ── */}
+      <motion.div
+        className="lms-blob-lens"
+        animate={{
+          x: posX,
+          width: knobWidth,
+          scaleX: isMoving ? 1.35 : 1,
+          scaleY: isMoving ? 1.3 : 1,
+        }}
+        transition={{ type: 'spring', stiffness: 380, damping: 28 }}
+        style={{ y: '-50%' }}
+      />
+    </div>
+  );
+}
+
 function SettingsIconButton({ onClick }: { onClick: () => void }) {
   const [clicked, setClicked] = useState(false);
   
@@ -1696,29 +1814,13 @@ function App() {
       )}
     </AnimatePresence>
 
-      {/* ── Mobile Navigation Bar (Visible on mobile/tablets <= 900px) ── */}
+      {/* ── Mobile Navigation Bar (Expanding Liquid Glass Mode Switcher) ── */}
       <div className="mobile-nav-bar">
-        <div className="mobile-nav-pill">
-          <button
-            type="button"
-            className={`mobile-nav-btn ${mobileTab === 'generator' ? 'active' : ''}`}
-            onClick={() => setMobileTab('generator')}
-          >
-            <FileText size={15} />
-            <span>Generator</span>
-          </button>
-          <button
-            type="button"
-            className={`mobile-nav-btn ${mobileTab === 'preview' ? 'active' : ''}`}
-            onClick={() => setMobileTab('preview')}
-          >
-            <Sparkles size={15} />
-            <span>Notes Preview</span>
-            {content && content !== DEFAULT_NOTE && (
-              <span className="mobile-nav-dot" title="Generated notes ready" />
-            )}
-          </button>
-        </div>
+        <LiquidModeSwitch
+          mode={mobileTab}
+          onChange={setMobileTab}
+          hasNewContent={Boolean(content && content !== DEFAULT_NOTE)}
+        />
         <button
           type="button"
           className="mobile-settings-btn"
