@@ -780,12 +780,12 @@ function App() {
   // ── Smart Dynamic Screen Size & Orientation Detection ──────────────────
   const [isCompactScreen, setIsCompactScreen] = useState(() => {
     if (typeof window === 'undefined') return false;
-    return window.innerWidth <= 960 || (window.innerWidth <= 1100 && window.innerHeight > window.innerWidth);
+    return window.innerWidth <= 960;
   });
 
   useEffect(() => {
     const handleScreenResize = () => {
-      const compact = window.innerWidth <= 960 || (window.innerWidth <= 1100 && window.innerHeight > window.innerWidth);
+      const compact = window.innerWidth <= 960;
       setIsCompactScreen(compact);
     };
 
@@ -894,11 +894,13 @@ function App() {
   const touchStartYRef = useRef<number | null>(null);
 
   const handleMainTouchStart = (e: React.TouchEvent) => {
+    if (!isCompactScreen) return;
     touchStartXRef.current = e.touches[0].clientX;
     touchStartYRef.current = e.touches[0].clientY;
   };
 
   const handleMainTouchEnd = (e: React.TouchEvent) => {
+    if (!isCompactScreen) return;
     if (touchStartXRef.current === null || touchStartYRef.current === null) return;
     const deltaX = e.changedTouches[0].clientX - touchStartXRef.current;
     const deltaY = e.changedTouches[0].clientY - touchStartYRef.current;
@@ -1750,208 +1752,166 @@ function App() {
               exit={{ opacity: 0 }}
               onClick={() => setShowSettings(false)}
             />
-            <motion.div
-              className="settings-panel"
-              initial={{ opacity: 0, scale: 0.94, y: -10 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.94, y: -10 }}
-              transition={{ type: 'spring', damping: 26, stiffness: 360 }}
-            >
-              <div className="settings-content">
-                <div className="settings-header">
-                  <h3>Settings & AI Configuration</h3>
-                  <button className="settings-close-btn" onClick={() => setShowSettings(false)}>
-                    <X size={18} />
-                  </button>
-                </div>
-
-              {/* Provider Toggle – Liquid Switch */}
-              <div className="provider-switcher">
-                <span className="provider-label">AI Provider</span>
-                <LiquidProviderSwitch provider={aiProvider} onChange={switchProvider} />
-              </div>
-
-              {/* API Keys */}
-              <AnimatePresence mode="wait">
-                {aiProvider === 'gemini' ? (
-                  <motion.div
-                    key="gemini-key"
-                    initial={{ opacity: 0, y: -4 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 4 }}
-                    className="key-section"
-                  >
-                    <p className="settings-desc">
-                      Get your free Gemini key at{' '}
-                      <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noreferrer" style={{ color: 'var(--accent)' }}>
-                        Google AI Studio
-                      </a>.
-                    </p>
-                    <div className="input-group">
-                      <input
-                        id="gemini-api-key-input"
-                        type="password"
-                        value={geminiApiKey}
-                        onChange={e => saveGeminiKey(e.target.value)}
-                        placeholder="Paste your Gemini AI API Key (AIz...)"
-                      />
-                    </div>
-                  </motion.div>
-                ) : aiProvider === 'groq' ? (
-                  <motion.div
-                    key="groq-key"
-                    initial={{ opacity: 0, y: -4 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 4 }}
-                    className="key-section"
-                  >
-                    <p className="settings-desc">
-                      Get your Groq key at{' '}
-                      <a href="https://console.groq.com/keys" target="_blank" rel="noreferrer" style={{ color: '#f97316' }}>
-                        console.groq.com
-                      </a>. Recommended: Llama 3.3 70B.
-                    </p>
-                    <div className="input-group">
-                      <input
-                        id="groq-api-key-input"
-                        type="password"
-                        value={groqApiKey}
-                        onChange={e => saveGroqKey(e.target.value)}
-                        placeholder="Paste your Groq API Key (gsk_...)"
-                      />
-                    </div>
-                    <div className="model-selector">
-                      <label className="model-label">Groq Model</label>
-                      <select
-                        id="groq-model-select"
-                        className="model-select"
-                        value={groqModel}
-                        onChange={e => saveGroqModel(e.target.value)}
-                      >
-                        {GROQ_MODELS.map(m => (
-                          <option key={m.id} value={m.id}>{m.label}</option>
-                        ))}
-                      </select>
-                    </div>
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="or-key"
-                    initial={{ opacity: 0, y: -4 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 4 }}
-                    className="key-section"
-                  >
-                    <p className="settings-desc">
-                      Get your OpenRouter key at{' '}
-                      <a href="https://openrouter.ai/keys" target="_blank" rel="noreferrer" style={{ color: '#0066cc' }}>
-                        openrouter.ai
-                      </a>.
-                    </p>
-                    <div className="input-group">
-                      <input
-                        id="or-api-key-input"
-                        type="password"
-                        value={openRouterApiKey}
-                        onChange={e => saveOpenRouterKey(e.target.value)}
-                        placeholder="Paste your OpenRouter API Key (sk-or-...)"
-                      />
-                    </div>
-                    <div className="model-selector">
-                      <label className="model-label">Model</label>
-                      <select
-                        id="or-model-select"
-                        className="model-select or-select"
-                        value={openRouterModel}
-                        onChange={e => saveOpenRouterModel(e.target.value)}
-                      >
-                        {OPENROUTER_MODELS.map(m => (
-                          <option key={m.id} value={m.id}>{m.label}</option>
-                        ))}
-                      </select>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-
-              {/* ── Compact PWA Install Row ── */}
-              <div className="install-pwa-compact-row">
-                <div className="install-pwa-compact-info">
-                  <img src="/icons/icon-192.png" alt="App Icon" className="install-pwa-compact-icon" />
-                  <div>
-                    <div className="install-pwa-compact-title">Liquid Glass Notes App</div>
-                    <div className="install-pwa-compact-meta">Offline ready & fullscreen</div>
+            {!isCompactScreen ? (
+              // ── Desktop PC Settings Panel (> 960px) ───────────────────────────
+              <motion.div
+                className="settings-panel desktop-settings-panel"
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.22 }}
+              >
+                <div className="settings-content">
+                  <div className="settings-header">
+                    <h3>Configuration</h3>
+                    <button className="settings-close-btn" onClick={() => setShowSettings(false)} aria-label="Close Settings">
+                      <X size={20} />
+                    </button>
                   </div>
-                </div>
-                <button
-                  type="button"
-                  className={`install-pwa-btn-compact ${isAppInstalled ? 'installed' : ''}`}
-                  onClick={handleInstallApp}
-                >
-                  {isAppInstalled ? (
-                    <>
-                      <CheckCircle2 size={13} />
-                      <span>Installed</span>
-                    </>
-                  ) : (
-                    <>
-                      <Download size={13} />
-                      <span>Install App</span>
-                    </>
-                  )}
-                </button>
-              </div>
 
-              {/* ── Local LM Studio OCR (Collapsible) ── */}
-              <div className="settings-accordion-card">
-                <div className="settings-accordion-header">
-                  <button
-                    type="button"
-                    className="settings-accordion-trigger"
-                    onClick={() => setShowOcrSection(!showOcrSection)}
-                  >
-                    <Zap size={15} color="#3b82f6" />
-                    <span>Local OCR (LM Studio)</span>
-                    {showOcrSection ? <ChevronUp size={15} /> : <ChevronDown size={15} />}
-                  </button>
-                  <label className="settings-accordion-toggle">
-                    <input
-                      type="checkbox"
-                      checked={localOcrEnabled}
-                      onChange={e => {
-                        saveLocalOcrEnabled(e.target.checked);
-                        if (e.target.checked) setShowOcrSection(true);
-                      }}
-                      style={{ accentColor: '#3b82f6', width: '15px', height: '15px' }}
-                    />
-                    {localOcrEnabled ? <span className="local-ocr-badge">ON</span> : <span style={{ color: '#94a3b8', fontSize: '0.72rem' }}>OFF</span>}
-                  </label>
-                </div>
-                <AnimatePresence>
-                  {showOcrSection && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.18 }}
-                      className="settings-accordion-body"
-                    >
-                      <p className="local-ocr-desc">
-                        Extracts text locally with LightOnOCR-2 before AI prompt generation.
-                      </p>
-                      <div className="local-ocr-inputs">
-                        <div className="local-ocr-row">
-                          <span className="local-ocr-label">Server:</span>
+                  {/* Provider Toggle – Liquid Switch */}
+                  <div className="provider-switcher">
+                    <span className="provider-label">AI Provider</span>
+                    <LiquidProviderSwitch provider={aiProvider} onChange={switchProvider} />
+                  </div>
+
+                  {/* API Keys */}
+                  <AnimatePresence mode="wait">
+                    {aiProvider === 'gemini' ? (
+                      <motion.div
+                        key="gemini-key"
+                        initial={{ opacity: 0, y: -6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 6 }}
+                        className="key-section"
+                      >
+                        <p className="settings-desc">
+                          Get your free Gemini key at{' '}
+                          <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noreferrer" style={{ color: 'var(--accent)' }}>
+                            Google AI Studio
+                          </a>.
+                        </p>
+                        <div className="input-group">
                           <input
-                            className="local-ocr-input"
-                            type="text"
-                            value={localOcrEndpoint}
-                            onChange={e => saveLocalOcrEndpoint(e.target.value)}
-                            placeholder="http://169.254.83.107:1234"
+                            id="gemini-api-key-input"
+                            type="password"
+                            value={geminiApiKey}
+                            onChange={e => saveGeminiKey(e.target.value)}
+                            placeholder="Paste your Gemini AI API Key here (AIz...)"
                           />
                         </div>
-                        <div className="local-ocr-row">
-                          <span className="local-ocr-label">Model:</span>
+                      </motion.div>
+                    ) : aiProvider === 'groq' ? (
+                      <motion.div
+                        key="groq-key"
+                        initial={{ opacity: 0, y: -6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 6 }}
+                        className="key-section"
+                      >
+                        <p className="settings-desc">
+                          Get your Groq key at{' '}
+                          <a href="https://console.groq.com/keys" target="_blank" rel="noreferrer" style={{ color: '#f97316' }}>
+                            console.groq.com
+                          </a>. Recommended: Llama 3.3 70B.
+                        </p>
+                        <div className="input-group">
+                          <input
+                            id="groq-api-key-input"
+                            type="password"
+                            value={groqApiKey}
+                            onChange={e => saveGroqKey(e.target.value)}
+                            placeholder="Paste your Groq API Key here (gsk_...)"
+                          />
+                        </div>
+                        <div className="model-selector">
+                          <label className="model-label">Groq Model</label>
+                          <select
+                            id="groq-model-select"
+                            className="model-select"
+                            value={groqModel}
+                            onChange={e => saveGroqModel(e.target.value)}
+                          >
+                            {GROQ_MODELS.map(m => (
+                              <option key={m.id} value={m.id}>{m.label}</option>
+                            ))}
+                          </select>
+                        </div>
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        key="or-key"
+                        initial={{ opacity: 0, y: -6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 6 }}
+                        className="key-section"
+                      >
+                        <p className="settings-desc">
+                          Get your OpenRouter key at{' '}
+                          <a href="https://openrouter.ai/keys" target="_blank" rel="noreferrer" style={{ color: '#0066cc' }}>
+                            openrouter.ai
+                          </a>.
+                        </p>
+                        <div className="input-group">
+                          <input
+                            id="or-api-key-input"
+                            type="password"
+                            value={openRouterApiKey}
+                            onChange={e => saveOpenRouterKey(e.target.value)}
+                            placeholder="Paste your OpenRouter API Key here (sk-or-...)"
+                          />
+                        </div>
+                        <div className="model-selector">
+                          <label className="model-label">Model</label>
+                          <select
+                            id="or-model-select"
+                            className="model-select or-select"
+                            value={openRouterModel}
+                            onChange={e => saveOpenRouterModel(e.target.value)}
+                          >
+                            {OPENROUTER_MODELS.map(m => (
+                              <option key={m.id} value={m.id}>{m.label}</option>
+                            ))}
+                          </select>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+
+                  {/* ── Local LM Studio OCR Settings ─── */}
+                  <div className="local-ocr-card">
+                    <div className="local-ocr-card-header">
+                      <div className="local-ocr-title">
+                        <Zap size={16} color="#3b82f6" />
+                        <span>Local OCR (LM Studio)</span>
+                      </div>
+                      <label style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', cursor: 'pointer', fontSize: '0.8rem', fontWeight: '700' }}>
+                        <input
+                          type="checkbox"
+                          checked={localOcrEnabled}
+                          onChange={e => saveLocalOcrEnabled(e.target.checked)}
+                          style={{ accentColor: '#3b82f6', width: '16px', height: '16px' }}
+                        />
+                        {localOcrEnabled ? <span className="local-ocr-badge">ENABLED</span> : <span style={{ color: '#64748b', fontSize: '0.72rem' }}>DISABLED</span>}
+                      </label>
+                    </div>
+                    <p className="local-ocr-desc">
+                      Extracts 100% of text from multi-page PDFs and images locally on your computer with <strong>LightOnOCR-2</strong> before sending to Gemini/Groq. Zero cloud cost & zero skipped pages.
+                    </p>
+                    <div className="local-ocr-inputs">
+                      <div className="local-ocr-row">
+                        <span className="local-ocr-label">Server URL:</span>
+                        <input
+                          className="local-ocr-input"
+                          type="text"
+                          value={localOcrEndpoint}
+                          onChange={e => saveLocalOcrEndpoint(e.target.value)}
+                          placeholder="http://169.254.83.107:1234"
+                        />
+                      </div>
+                      <div className="local-ocr-row">
+                        <span className="local-ocr-label">OCR Model:</span>
+                        <div style={{ display: 'flex', gap: '0.4rem', flex: 1 }}>
                           <input
                             className="local-ocr-input"
                             type="text"
@@ -1967,80 +1927,384 @@ function App() {
                             Test
                           </button>
                         </div>
-                        {testOcrStatus && (
-                          <div className="local-ocr-test-status">
-                            {testOcrStatus}
-                          </div>
+                      </div>
+                      {testOcrStatus && (
+                        <div className="local-ocr-test-status" style={{ fontSize: '0.75rem', marginTop: '0.35rem', color: testOcrStatus.includes('✅') ? '#4ade80' : '#f87171' }}>
+                          {testOcrStatus}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* ── Liquid Glass App Installation (PWA) ─── */}
+                  <div className="install-pwa-card">
+                    <div className="install-pwa-preview">
+                      <div className="install-pwa-icon-glow"></div>
+                      <img src="/icons/icon-192.png" alt="Liquid Glass Notes Logo" className="install-pwa-logo" />
+                    </div>
+                    <div className="install-pwa-details">
+                      <div className="install-pwa-title">
+                        <span>FatNotes App</span>
+                        <span className={`install-pwa-badge ${isAppInstalled ? 'installed' : ''}`}>
+                          {isAppInstalled ? 'INSTALLED' : 'PWA READY'}
+                        </span>
+                      </div>
+                      <p className="install-pwa-desc">
+                        Install FatNotes with the <strong>Liquid Glass Notes</strong> logo for instant offline access and fullscreen immersion on your phone or desktop.
+                      </p>
+                      <button
+                        type="button"
+                        className={`install-pwa-btn ${isAppInstalled ? 'installed' : ''}`}
+                        onClick={handleInstallApp}
+                      >
+                        {isAppInstalled ? (
+                          <>
+                            <CheckCircle2 size={15} />
+                            <span>Running as Installed App</span>
+                          </>
+                        ) : (
+                          <>
+                            <Download size={15} />
+                            <span>Install FatNotes App</span>
+                          </>
                         )}
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+                      </button>
+                    </div>
+                  </div>
 
-              {/* ── Glass Shader Tuning (Collapsible) ── */}
-              <div className="settings-accordion-card">
-                <div className="settings-accordion-header">
-                  <button
-                    type="button"
-                    className="settings-accordion-trigger"
-                    onClick={() => setShowGlassSection(!showGlassSection)}
-                  >
-                    <Sparkles size={15} color="#a855f7" />
-                    <span>Glass Shader Appearance</span>
-                    {showGlassSection ? <ChevronUp size={15} /> : <ChevronDown size={15} />}
-                  </button>
-                  <span style={{ fontSize: '0.7rem', color: '#94a3b8' }}>Advanced</span>
+                  {/* ── Glass Customization ─── */}
+                  <div className="glass-controls">
+                    <h4 style={{ marginTop: '1.5rem', marginBottom: '0.75rem', color: 'rgba(255,255,255,0.9)' }}>Glass Appearance</h4>
+                    
+                    <div className="slider-group">
+                      <div className="slider-label">
+                        <span>Refraction</span>
+                        <span>{glassSettings.refraction.toFixed(3)}</span>
+                      </div>
+                      <input type="range" min="0" max="0.1" step="0.001" value={glassSettings.refraction} onChange={e => updateGlassSetting('refraction', parseFloat(e.target.value))} />
+                    </div>
+                    
+                    <div className="slider-group">
+                      <div className="slider-label">
+                        <span>Bevel Depth</span>
+                        <span>{glassSettings.bevelDepth.toFixed(2)}</span>
+                      </div>
+                      <input type="range" min="0" max="0.5" step="0.01" value={glassSettings.bevelDepth} onChange={e => updateGlassSetting('bevelDepth', parseFloat(e.target.value))} />
+                    </div>
+                    
+                    <div className="slider-group">
+                      <div className="slider-label">
+                        <span>Bevel Width</span>
+                        <span>{glassSettings.bevelWidth.toFixed(2)}</span>
+                      </div>
+                      <input type="range" min="0" max="0.5" step="0.01" value={glassSettings.bevelWidth} onChange={e => updateGlassSetting('bevelWidth', parseFloat(e.target.value))} />
+                    </div>
+                    
+                    <div className="slider-group">
+                      <div className="slider-label">
+                        <span>Frost (Blur)</span>
+                        <span>{glassSettings.frost}px</span>
+                      </div>
+                      <input type="range" min="0" max="30" step="1" value={glassSettings.frost} onChange={e => updateGlassSetting('frost', parseFloat(e.target.value))} />
+                    </div>
+                  </div>
                 </div>
-                <AnimatePresence>
-                  {showGlassSection && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.18 }}
-                      className="settings-accordion-body"
-                    >
-                      <div className="glass-controls">
-                        <div className="slider-group">
-                          <div className="slider-label">
-                            <span>Refraction</span>
-                            <span>{glassSettings.refraction.toFixed(3)}</span>
-                          </div>
-                          <input type="range" min="0" max="0.1" step="0.001" value={glassSettings.refraction} onChange={e => updateGlassSetting('refraction', parseFloat(e.target.value))} />
-                        </div>
-                        
-                        <div className="slider-group">
-                          <div className="slider-label">
-                            <span>Bevel Depth</span>
-                            <span>{glassSettings.bevelDepth.toFixed(2)}</span>
-                          </div>
-                          <input type="range" min="0" max="0.5" step="0.01" value={glassSettings.bevelDepth} onChange={e => updateGlassSetting('bevelDepth', parseFloat(e.target.value))} />
-                        </div>
-                        
-                        <div className="slider-group">
-                          <div className="slider-label">
-                            <span>Bevel Width</span>
-                            <span>{glassSettings.bevelWidth.toFixed(2)}</span>
-                          </div>
-                          <input type="range" min="0" max="0.5" step="0.01" value={glassSettings.bevelWidth} onChange={e => updateGlassSetting('bevelWidth', parseFloat(e.target.value))} />
-                        </div>
-                        
-                        <div className="slider-group">
-                          <div className="slider-label">
-                            <span>Frost (Blur)</span>
-                            <span>{glassSettings.frost}px</span>
-                          </div>
-                          <input type="range" min="0" max="30" step="1" value={glassSettings.frost} onChange={e => updateGlassSetting('frost', parseFloat(e.target.value))} />
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+              </motion.div>
+            ) : (
+              // ── Mobile Phone Compact Collapsible Modal (<= 960px) ─────────────
+              <motion.div
+                className="settings-panel mobile-settings-modal"
+                initial={{ opacity: 0, scale: 0.94, y: -10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.94, y: -10 }}
+                transition={{ type: 'spring', damping: 26, stiffness: 360 }}
+              >
+                <div className="settings-content">
+                  <div className="settings-header">
+                    <h3>Settings & AI Configuration</h3>
+                    <button className="settings-close-btn" onClick={() => setShowSettings(false)} aria-label="Close Settings">
+                      <X size={18} />
+                    </button>
+                  </div>
 
-            </div>
-          </motion.div>
+                  {/* Provider Toggle – Liquid Switch */}
+                  <div className="provider-switcher">
+                    <span className="provider-label">AI Provider</span>
+                    <LiquidProviderSwitch provider={aiProvider} onChange={switchProvider} />
+                  </div>
+
+                  {/* API Keys */}
+                  <AnimatePresence mode="wait">
+                    {aiProvider === 'gemini' ? (
+                      <motion.div
+                        key="gemini-key"
+                        initial={{ opacity: 0, y: -4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 4 }}
+                        className="key-section"
+                      >
+                        <p className="settings-desc">
+                          Get your free Gemini key at{' '}
+                          <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noreferrer" style={{ color: 'var(--accent)' }}>
+                            Google AI Studio
+                          </a>.
+                        </p>
+                        <div className="input-group">
+                          <input
+                            id="gemini-api-key-input"
+                            type="password"
+                            value={geminiApiKey}
+                            onChange={e => saveGeminiKey(e.target.value)}
+                            placeholder="Paste your Gemini AI API Key (AIz...)"
+                          />
+                        </div>
+                      </motion.div>
+                    ) : aiProvider === 'groq' ? (
+                      <motion.div
+                        key="groq-key"
+                        initial={{ opacity: 0, y: -4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 4 }}
+                        className="key-section"
+                      >
+                        <p className="settings-desc">
+                          Get your Groq key at{' '}
+                          <a href="https://console.groq.com/keys" target="_blank" rel="noreferrer" style={{ color: '#f97316' }}>
+                            console.groq.com
+                          </a>. Recommended: Llama 3.3 70B.
+                        </p>
+                        <div className="input-group">
+                          <input
+                            id="groq-api-key-input"
+                            type="password"
+                            value={groqApiKey}
+                            onChange={e => saveGroqKey(e.target.value)}
+                            placeholder="Paste your Groq API Key (gsk_...)"
+                          />
+                        </div>
+                        <div className="model-selector">
+                          <label className="model-label">Groq Model</label>
+                          <select
+                            id="groq-model-select"
+                            className="model-select"
+                            value={groqModel}
+                            onChange={e => saveGroqModel(e.target.value)}
+                          >
+                            {GROQ_MODELS.map(m => (
+                              <option key={m.id} value={m.id}>{m.label}</option>
+                            ))}
+                          </select>
+                        </div>
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        key="or-key"
+                        initial={{ opacity: 0, y: -4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 4 }}
+                        className="key-section"
+                      >
+                        <p className="settings-desc">
+                          Get your OpenRouter key at{' '}
+                          <a href="https://openrouter.ai/keys" target="_blank" rel="noreferrer" style={{ color: '#0066cc' }}>
+                            openrouter.ai
+                          </a>.
+                        </p>
+                        <div className="input-group">
+                          <input
+                            id="or-api-key-input"
+                            type="password"
+                            value={openRouterApiKey}
+                            onChange={e => saveOpenRouterKey(e.target.value)}
+                            placeholder="Paste your OpenRouter API Key (sk-or-...)"
+                          />
+                        </div>
+                        <div className="model-selector">
+                          <label className="model-label">Model</label>
+                          <select
+                            id="or-model-select"
+                            className="model-select or-select"
+                            value={openRouterModel}
+                            onChange={e => saveOpenRouterModel(e.target.value)}
+                          >
+                            {OPENROUTER_MODELS.map(m => (
+                              <option key={m.id} value={m.id}>{m.label}</option>
+                            ))}
+                          </select>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+
+                  {/* ── Compact PWA Install Row ── */}
+                  <div className="install-pwa-compact-row">
+                    <div className="install-pwa-compact-info">
+                      <img src="/icons/icon-192.png" alt="App Icon" className="install-pwa-compact-icon" />
+                      <div>
+                        <div className="install-pwa-compact-title">Liquid Glass Notes App</div>
+                        <div className="install-pwa-compact-meta">Offline ready & fullscreen</div>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      className={`install-pwa-btn-compact ${isAppInstalled ? 'installed' : ''}`}
+                      onClick={handleInstallApp}
+                    >
+                      {isAppInstalled ? (
+                        <>
+                          <CheckCircle2 size={13} />
+                          <span>Installed</span>
+                        </>
+                      ) : (
+                        <>
+                          <Download size={13} />
+                          <span>Install App</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+
+                  {/* ── Local LM Studio OCR (Collapsible) ── */}
+                  <div className="settings-accordion-card">
+                    <div className="settings-accordion-header">
+                      <button
+                        type="button"
+                        className="settings-accordion-trigger"
+                        onClick={() => setShowOcrSection(!showOcrSection)}
+                      >
+                        <Zap size={15} color="#3b82f6" />
+                        <span>Local OCR (LM Studio)</span>
+                        {showOcrSection ? <ChevronUp size={15} /> : <ChevronDown size={15} />}
+                      </button>
+                      <label className="settings-accordion-toggle">
+                        <input
+                          type="checkbox"
+                          checked={localOcrEnabled}
+                          onChange={e => {
+                            saveLocalOcrEnabled(e.target.checked);
+                            if (e.target.checked) setShowOcrSection(true);
+                          }}
+                          style={{ accentColor: '#3b82f6', width: '15px', height: '15px' }}
+                        />
+                        {localOcrEnabled ? <span className="local-ocr-badge">ON</span> : <span style={{ color: '#94a3b8', fontSize: '0.72rem' }}>OFF</span>}
+                      </label>
+                    </div>
+                    <AnimatePresence>
+                      {showOcrSection && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.18 }}
+                          className="settings-accordion-body"
+                        >
+                          <p className="local-ocr-desc">
+                            Extracts text locally with LightOnOCR-2 before AI prompt generation.
+                          </p>
+                          <div className="local-ocr-inputs">
+                            <div className="local-ocr-row">
+                              <span className="local-ocr-label">Server:</span>
+                              <input
+                                className="local-ocr-input"
+                                type="text"
+                                value={localOcrEndpoint}
+                                onChange={e => saveLocalOcrEndpoint(e.target.value)}
+                                placeholder="http://169.254.83.107:1234"
+                              />
+                            </div>
+                            <div className="local-ocr-row">
+                              <span className="local-ocr-label">Model:</span>
+                              <input
+                                className="local-ocr-input"
+                                type="text"
+                                value={localOcrModel}
+                                onChange={e => saveLocalOcrModel(e.target.value)}
+                                placeholder="lightonocr-2-1b"
+                              />
+                              <button
+                                type="button"
+                                className="local-ocr-test-btn"
+                                onClick={testLocalOcrConnection}
+                              >
+                                Test
+                              </button>
+                            </div>
+                            {testOcrStatus && (
+                              <div className="local-ocr-test-status">
+                                {testOcrStatus}
+                              </div>
+                            )}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
+                  {/* ── Glass Shader Tuning (Collapsible) ── */}
+                  <div className="settings-accordion-card">
+                    <div className="settings-accordion-header">
+                      <button
+                        type="button"
+                        className="settings-accordion-trigger"
+                        onClick={() => setShowGlassSection(!showGlassSection)}
+                      >
+                        <Sparkles size={15} color="#a855f7" />
+                        <span>Glass Shader Appearance</span>
+                        {showGlassSection ? <ChevronUp size={15} /> : <ChevronDown size={15} />}
+                      </button>
+                      <span style={{ fontSize: '0.7rem', color: '#94a3b8' }}>Advanced</span>
+                    </div>
+                    <AnimatePresence>
+                      {showGlassSection && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.18 }}
+                          className="settings-accordion-body"
+                        >
+                          <div className="glass-controls">
+                            <div className="slider-group">
+                              <div className="slider-label">
+                                <span>Refraction</span>
+                                <span>{glassSettings.refraction.toFixed(3)}</span>
+                              </div>
+                              <input type="range" min="0" max="0.1" step="0.001" value={glassSettings.refraction} onChange={e => updateGlassSetting('refraction', parseFloat(e.target.value))} />
+                            </div>
+                            
+                            <div className="slider-group">
+                              <div className="slider-label">
+                                <span>Bevel Depth</span>
+                                <span>{glassSettings.bevelDepth.toFixed(2)}</span>
+                              </div>
+                              <input type="range" min="0" max="0.5" step="0.01" value={glassSettings.bevelDepth} onChange={e => updateGlassSetting('bevelDepth', parseFloat(e.target.value))} />
+                            </div>
+                            
+                            <div className="slider-group">
+                              <div className="slider-label">
+                                <span>Bevel Width</span>
+                                <span>{glassSettings.bevelWidth.toFixed(2)}</span>
+                              </div>
+                              <input type="range" min="0" max="0.5" step="0.01" value={glassSettings.bevelWidth} onChange={e => updateGlassSetting('bevelWidth', parseFloat(e.target.value))} />
+                            </div>
+                            
+                            <div className="slider-group">
+                              <div className="slider-label">
+                                <span>Frost (Blur)</span>
+                                <span>{glassSettings.frost}px</span>
+                              </div>
+                              <input type="range" min="0" max="30" step="1" value={glassSettings.frost} onChange={e => updateGlassSetting('frost', parseFloat(e.target.value))} />
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
+                </div>
+              </motion.div>
+            )}
+
         </>
       )}
     </AnimatePresence>

@@ -30,9 +30,15 @@
 }
 
 html {
-  font-size: clamp(14px, 0.35vw + 13px, 17.5px);
+  font-size: 16px;
   text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
+}
+
+@media screen and (max-width: 960px) {
+  html {
+    font-size: clamp(14px, 0.35vw + 13px, 17.5px);
+  }
 }
 
 * {
