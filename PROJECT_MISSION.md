@@ -1,7 +1,7 @@
 # Project Mission
 
 ## Project Name
-AesthetNote — Intelligent Note & Question Paper Generator (2-Stage AI Engine)
+FatNotes — Intelligent Note & Question Paper Generator (2-Stage AI Engine)
 
 ## Main Objective
 A high-performance, aesthetically stunning web application designed for students and educators. It transforms textbook photos, multi-page PDFs, handwritten notes, YouTube lectures, and article links into exam-ready study notes, stanza-by-stanza poem explanations, comprehensive revision summaries, or authentic board-style examination question papers with marking schemes.

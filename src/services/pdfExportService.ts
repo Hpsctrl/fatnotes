@@ -2,7 +2,7 @@ import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 
 /**
- * High-Fidelity Multi-Page PDF Exporter with Dark Aesthetic Liquid Glass Theme.
+ * High-Fidelity Multi-Page PDF Exporter.
  * 
  * Why this is immune to blank pages:
  * 1. html2pdf.js / html2canvas fails on long documents (e.g. 37 pages) because
@@ -13,7 +13,7 @@ import { jsPDF } from 'jspdf';
  * 
  * This engine paginates the markdown elements into discrete A4 page containers (height ~1130px),
  * renders each page INDIVIDUALLY to an isolated canvas (only 1600x2260px at 2x scale),
- * and streams each page into a vector jsPDF document with the gorgeous black blurry aesthetic theme.
+ * and streams each page into a vector jsPDF document with the clean dark liquid glass theme.
  */
 
 export interface ExportPdfOptions {
@@ -349,3 +349,5 @@ export async function exportNotesToAestheticPdf({
     }
   }
 }
+
+export const exportNotesToPdf = exportNotesToAestheticPdf;

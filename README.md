@@ -1,8 +1,8 @@
-# AesthetNote — Intelligent Note & Question Paper Generator 🚀
+# FatNotes — Intelligent Note & Question Paper Generator 🚀
 
 **Upload multiple textbook photos/PDFs or paste article/YouTube links and generate study notes or authentic exam papers in seconds!**
 
-AesthetNote is a high-performance web application designed for students and educators. Built with an Apple-style **liquid glass** UI, it features a **2-Stage Processing Engine** that combines local zero-cloud OCR (`LightOnOCR-2-1b`) with high-intelligence reasoning models (Gemini, Groq Llama 3.3 70B, and OpenRouter).
+FatNotes is a high-performance web application designed for students and educators. Built with an Apple-style **liquid glass** UI, it features a **2-Stage Processing Engine** that combines local zero-cloud OCR (`LightOnOCR-2-1b`) with high-intelligence reasoning models (Gemini, Groq Llama 3.3 70B, and OpenRouter).
 
 ---
 
@@ -65,7 +65,7 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
 1. Open **LM Studio** on your computer or local network.
 2. Load the model **`lightonocr-2-1b`** (or `Idefics2`).
 3. Start the Local Inference Server (default port: `1234`).
-4. In AesthetNote, open **Settings (⚙️)** and click **Test Server** under the Local OCR card.
+4. In FatNotes, open **Settings (⚙️)** and click **Test Server** under the Local OCR card.
 
 ---
 

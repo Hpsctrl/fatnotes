@@ -7,7 +7,7 @@ import { Download, Sparkles, FileText, UploadCloud, Settings, CheckCircle2, Aler
 import { motion, AnimatePresence } from 'framer-motion';
 import { QuestionPaperRenderer } from './components/QuestionPaperRenderer';
 import { detectLanguageFromContent, buildSyllabusAuditPrompt, parseAuditResponse, type AuditMetadata, type DetectedLanguage } from './services/syllabusAuditService';
-import { exportNotesToAestheticPdf } from './services/pdfExportService';
+import { exportNotesToPdf } from './services/pdfExportService';
 import './App.css';
 
 /* --- Animated Background Grid Component --- */
@@ -229,7 +229,7 @@ const OPENROUTER_MODELS = [
 
 const DEFAULT_NOTE = `# Upload a PDF or Image & Generate Notes or Question Papers!
 
-Welcome to **AesthetNote** — your versatile AI study & examination assistant.
+Welcome to **FatNotes** — your versatile AI study & examination assistant.
 
 1. Choose your **AI Provider** in settings (top right) — Gemini, Groq, or OpenRouter.
 2. Enter your **API Key** for the selected provider.
@@ -854,7 +854,7 @@ function App() {
     } else {
       const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
       if (isIOS) {
-        alert('📱 To Install FatNotes on iPhone/iPad:\n\n1. Tap the Share button (square with arrow) at the bottom.\n2. Scroll down and tap "Add to Home Screen".\n3. Tap "Add" in the top right.\n\nThe Liquid Glass Notes app will appear on your home screen!');
+        alert('📱 To Install FatNotes on iPhone/iPad:\n\n1. Tap the Share button (square with arrow) at the bottom.\n2. Scroll down and tap "Add to Home Screen".\n3. Tap "Add" in the top right.\n\nThe FatNotes app will appear on your home screen!');
       } else {
         alert('💻 To Install FatNotes:\n\n• In Chrome/Edge: Click the "Install" icon in your address bar (top right) or open menu (⋮) → "Install FatNotes".\n• On Android: Open browser menu (⋮) → "Install app" or "Add to Home screen".');
       }
@@ -1712,7 +1712,7 @@ function App() {
       const inner = (noteRef.current.querySelector('.note-card-inner') as HTMLElement) || noteRef.current;
       const cleanTitle = (noteTopic || 'Study_Notes').replace(/[^\w\s-]/gi, '').trim().replace(/\s+/g, '_');
 
-      await exportNotesToAestheticPdf({
+      await exportNotesToPdf({
         sourceElement: inner,
         filename: `${cleanTitle}.pdf`,
         topicTitle: noteTopic || 'Study Notes',
@@ -1964,7 +1964,7 @@ function App() {
                   <div className="install-pwa-card">
                     <div className="install-pwa-preview">
                       <div className="install-pwa-icon-glow"></div>
-                      <img src="/icons/icon-192.png" alt="Liquid Glass Notes Logo" className="install-pwa-logo" />
+                      <img src="/icons/icon-192.png" alt="FatNotes Logo" className="install-pwa-logo" />
                     </div>
                     <div className="install-pwa-details">
                       <div className="install-pwa-title">
@@ -1974,7 +1974,7 @@ function App() {
                         </span>
                       </div>
                       <p className="install-pwa-desc">
-                        Install FatNotes with the <strong>Liquid Glass Notes</strong> logo for instant offline access and fullscreen immersion on your phone or desktop.
+                        Install FatNotes for instant offline access and fullscreen study on your phone or desktop.
                       </p>
                       <button
                         type="button"
@@ -2165,7 +2165,7 @@ function App() {
                     <div className="install-pwa-compact-info">
                       <img src="/icons/icon-192.png" alt="App Icon" className="install-pwa-compact-icon" />
                       <div>
-                        <div className="install-pwa-compact-title">Liquid Glass Notes App</div>
+                        <div className="install-pwa-compact-title">FatNotes App</div>
                         <div className="install-pwa-compact-meta">Offline ready & fullscreen</div>
                       </div>
                     </div>
@@ -2346,7 +2346,7 @@ function App() {
               type="button"
               className="mobile-install-btn"
               onClick={handleInstallApp}
-              title="Install FatNotes App (Liquid Glass Icon)"
+              title="Install FatNotes App"
               aria-label="Install App"
             >
               <Download size={16} />
@@ -2400,7 +2400,7 @@ function App() {
                   type="button"
                   className="install-app-header-btn"
                   onClick={handleInstallApp}
-                  title="Install FatNotes App (Liquid Glass Icon)"
+                  title="Install FatNotes App"
                   aria-label="Install FatNotes App"
                 >
                   <Download size={14} />

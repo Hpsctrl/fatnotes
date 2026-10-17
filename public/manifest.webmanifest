@@ -1,7 +1,7 @@
 {
-  "name": "FatNotes - AI Liquid Notes",
+  "name": "FatNotes - AI Study Notes",
   "short_name": "FatNotes",
-  "description": "Transform study materials into dark-mode liquid glass study notes with AI.",
+  "description": "Transform study materials into comprehensive study notes and question papers with AI.",
   "start_url": "/",
   "id": "/",
   "scope": "/",
