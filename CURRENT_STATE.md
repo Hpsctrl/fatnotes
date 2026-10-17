@@ -37,7 +37,7 @@
 
 - [x] **Apple "hello" Entry Animation**:
   - Authentic cursive 'h' letter stroke handwriting animation on app startup.
-  - Smooth dissolve transition into workspace, tap-to-skip, and instant replay button in Settings.
+  - Smooth dissolve transition into workspace and tap-to-skip.
 - [x] **Pre-embedded Active Gemini Authorization Key**:
   - Pre-fills active Google Gemini authorization key out of the box so the app works immediately with zero manual configuration.
   - Full customization preserved in Settings modal for changing keys and switching models.
