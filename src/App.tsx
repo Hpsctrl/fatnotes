@@ -107,7 +107,7 @@ async function compressPdfSmartly(
   // If file is already under 12 MB, no compression needed
   if (file.size <= 12 * 1024 * 1024) return file;
 
-  onProgress?.(`⚡ Smart-compressing document (${(file.size / (1024 * 1024)).toFixed(1)} MB)...`);
+  onProgress?.(`Smart-compressing document (${(file.size / (1024 * 1024)).toFixed(1)} MB)...`);
 
   const pdfjsLib = await import('pdfjs-dist');
   pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorkerUrl;
@@ -120,7 +120,7 @@ async function compressPdfSmartly(
 
   for (let i = 1; i <= numPages; i++) {
     if (i % 2 === 0 || i === 1 || i === numPages) {
-      onProgress?.(`⚡ Smart-compressing page ${i} of ${numPages} (keeping text crisp)...`);
+      onProgress?.(`Smart-compressing page ${i} of ${numPages} (keeping text crisp)...`);
     }
     const page = await pdf.getPage(i);
 
@@ -165,7 +165,7 @@ async function compressPdfSmartly(
 
   const originalMb = (file.size / (1024 * 1024)).toFixed(1);
   const newMb = (compressedFile.size / (1024 * 1024)).toFixed(1);
-  onProgress?.(`✅ Smart-compressed from ${originalMb} MB down to ${newMb} MB! Text and illustrations preserved.`);
+  onProgress?.(`Smart-compressed from ${originalMb} MB down to ${newMb} MB! Text and illustrations preserved.`);
 
   return compressedFile;
 }
@@ -238,15 +238,15 @@ Welcome to **FatNotes** — your versatile AI study & examination assistant.
 2. Enter your **API Key** for the selected provider.
 3. Upload a **PDF** or **Image** (textbook page, handwritten notes, syllabus, etc.) or just type any topic.
 4. Tell the AI **exactly what you need** in the instructions box:
-   - 📋 *"Make a 50-mark question paper with 1-marker MCQs, 2-marker, 3-marker, and 5-marker questions"*
-   - 📝 *"Create a 20-mark unit test on Chapter 2 with complete marking scheme & answers"*
-   - 📖 *"Comprehensive study notes for Unit 2 in simple language"*
-   - 💡 *"Detailed stanza-by-stanza poem explanation with literary devices"*
+   - *"Make a 50-mark question paper with 1-marker MCQs, 2-marker, 3-marker, and 5-marker questions"*
+   - *"Create a 20-mark unit test on Chapter 2 with complete marking scheme & answers"*
+   - *"Comprehensive study notes for Unit 2 in simple language"*
+   - *"Detailed stanza-by-stanza poem explanation with literary devices"*
 5. Hit **Generate** — the AI automatically switches into Exam Paper mode for tests and Study Notes mode for revision!
 
 ---
 
-### 💡 You can ask for ANYTHING:
+### You can ask for ANYTHING:
 - *"CBSE pattern 80-mark board question paper for Class 10 Science"*
 - *"10-mark quick quiz with 1-mark MCQs"*
 - *"List all definitions and formulas from Unit 3"*
@@ -267,17 +267,17 @@ const isQuestionPaperContent = (text: string): boolean => {
 const SYSTEM_INSTRUCTIONS = (userPrompt: string, detectedLanguage: DetectedLanguage = 'english') => {
   const languageDirective =
     detectedLanguage === 'english'
-      ? `=== 🌐 STRICT MANDATORY LANGUAGE DIRECTIVE: 100% ENGLISH ===
+      ? `=== STRICT MANDATORY LANGUAGE DIRECTIVE: 100% ENGLISH ===
 - You MUST write the ENTIRE notes or examination paper 100% in ENGLISH.
 - NEVER generate explanations, headings, definitions, or notes in Hindi, Hinglish, or Devanagari script.
 - Even if the source material or topic mentions Indian history, literature, poems, or NCERT concepts (e.g. Kabir, Rahim, Indian freedom struggle, CBSE syllabus), all explanations, summaries, and notes MUST be in English.
 - If source literature contains Hindi verses/poetry, quote the line if necessary, but provide immediate English meanings and 100% English explanations.
 - Outputting unauthorized Hindi or Hinglish when English is specified is a FATAL COMPLIANCE FAILURE.`
       : detectedLanguage === 'hindi'
-      ? `=== 🌐 MANDATORY LANGUAGE DIRECTIVE: HINDI ===
+      ? `=== MANDATORY LANGUAGE DIRECTIVE: HINDI ===
 - Output strictly in clean, modern, accessible Hindi using Devanagari script.
 - Keep scientific formulas, symbols, and key technical English terms in brackets where helpful.`
-      : `=== 🌐 MANDATORY LANGUAGE DIRECTIVE: HINGLISH ===
+      : `=== MANDATORY LANGUAGE DIRECTIVE: HINGLISH ===
 - Mix Hindi and English naturally in Latin script, exactly the way modern students speak and study.
 - Keep technical terms and formulas clear and sharp.`;
 
@@ -295,18 +295,18 @@ ${languageDirective}
 "${userPrompt || "Generate full, detailed, point-wise study notes for ALL topics mentioned in the document. Cover every topic exhaustively with proper definitions, explanations, formulas, theories, examples, and key points. Use bullet points and numbered lists. Make it exam-ready — the student should be able to pass their exam just by reading these notes."}"
 ^^^ THIS IS YOUR #1 PRIORITY. DO EXACTLY WHAT THIS SAYS. ^^^
 
-=== ⏰ ABSOLUTE MANDATORY RULE: NEVER MISS ANY DATES, YEARS & TIMELINES ===
+=== ABSOLUTE MANDATORY RULE: NEVER MISS ANY DATES, YEARS & TIMELINES ===
 - CRITICAL EXAM REQUIREMENT: You MUST include and preserve EVERY single date, year, century, historical era, publication date, birth/death year, timeline event, and chronological marker found in the source documents or topic.
 - Format all dates, years, and historical figures in **bold** (e.g. **1861**, **1913**, **23 July 1823 – 26 November 1896**, **Late 19th Century**).
 - For literature/poems/authors: ALWAYS explicitly include the author's birth/death dates, Nobel Prize / award years, and the year or historical period in which the text/poem was composed or published.
 - For history/events/science: Never generalize or drop years. If a date is mentioned (or contextually known), explicitly state it.
-- Include a dedicated "📅 Key Dates & Chronology" or "About the Author & Context" bulleted section whenever dates or biographical years are present.
+- Include a dedicated "Key Dates & Chronology" or "About the Author & Context" bulleted section whenever dates or biographical years are present.
 - Omitting or skipping any date present in the source material is a FATAL ERROR.
 
 === PRIMARY DEFAULT: STUDY NOTES & CONCEPT EXPLANATIONS (95% of tasks) ===
 Unless the user explicitly asks for a "test paper" or "question paper", ALWAYS produce rich, structured study notes:
 
-📝 NOTE TYPES & STYLES YOU CAN PRODUCE:
+NOTE TYPES & STYLES YOU CAN PRODUCE:
 1. DETAILED STUDY NOTES (Default):
    - Exhaustive topic-by-topic breakdown covering all concepts, formulas, definitions, key points, and examples.
    - Use ## and ### headings, **bold** key terms, bullet points, and numbered lists.
@@ -324,7 +324,7 @@ Unless the user explicitly asks for a "test paper" or "question paper", ALWAYS p
 4. QUESTIONS & ANSWERS (Study Q&A):
    - "important questions" / "Q&A" / "chapter questions" → Important questions with full model answers.
 
-🎓 SPECIAL OCCASION: QUESTION PAPERS & EXAMS (ONLY when explicitly asked) ===
+SPECIAL OCCASION: QUESTION PAPERS & EXAMS (ONLY when explicitly asked) ===
 ONLY if the user explicitly asks for a "question paper", "test paper", "exam paper", "mock test", "unit test", "X marks test", or asks for "1-marker, 2-marker, 5-marker test":
 - Format as an official examination paper:
   # [INSTITUTION / BOARD NAME]
@@ -370,6 +370,7 @@ ONLY if the user explicitly asks for a "question paper", "test paper", "exam pap
 
 === GENERAL OUTPUT RULES ===
 - Output ONLY clean Markdown. No \`\`\`markdown wrappers. No greeting text.
+- Do NOT use emojis anywhere in your output (no emojis in headings, notes, bullet points, or question papers). Maintain a clean, academic, professional tone.
 - The VERY FIRST LINE must be a single # Heading (used for PDF filename).
 - ${languageDirective}`;
 };
@@ -858,9 +859,9 @@ function App() {
     } else {
       const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
       if (isIOS) {
-        alert('📱 To Install FatNotes on iPhone/iPad:\n\n1. Tap the Share button (square with arrow) at the bottom.\n2. Scroll down and tap "Add to Home Screen".\n3. Tap "Add" in the top right.\n\nThe FatNotes app will appear on your home screen!');
+        alert('To Install FatNotes on iPhone/iPad:\n\n1. Tap the Share button (square with arrow) at the bottom.\n2. Scroll down and tap "Add to Home Screen".\n3. Tap "Add" in the top right.\n\nThe FatNotes app will appear on your home screen!');
       } else {
-        alert('💻 To Install FatNotes:\n\n• In Chrome/Edge: Click the "Install" icon in your address bar (top right) or open menu (⋮) → "Install FatNotes".\n• On Android: Open browser menu (⋮) → "Install app" or "Add to Home screen".');
+        alert('To Install FatNotes:\n\n• In Chrome/Edge: Click the "Install" icon in your address bar (top right) or open menu (⋮) → "Install FatNotes".\n• On Android: Open browser menu (⋮) → "Install app" or "Add to Home screen".');
       }
     }
   };
@@ -1060,12 +1061,12 @@ function App() {
         }),
       });
       if (res.ok) {
-        setTestOcrStatus(`✅ Connected to LM Studio (${localOcrModel})`);
+        setTestOcrStatus(`Connected to LM Studio (${localOcrModel})`);
       } else {
-        setTestOcrStatus(`❌ Server returned ${res.status}`);
+        setTestOcrStatus(`Server returned ${res.status}`);
       }
     } catch (e: any) {
-      setTestOcrStatus(`❌ Connection failed: ${e.message}`);
+      setTestOcrStatus(`Connection failed: ${e.message}`);
     }
   };
 
@@ -1212,7 +1213,7 @@ function App() {
     const numBytes = file.size;
 
     // Step 1: Start a resumable upload session (via proxy)
-    setContent('📤 Uploading file to Gemini… (starting upload)');
+    setContent('Uploading file to Gemini… (starting upload)');
     const startParams = new URLSearchParams({
       key: apiKey,
       contentLength: String(numBytes),
@@ -1230,7 +1231,7 @@ function App() {
     if (!uploadUrl) throw new Error('No upload URL returned from Gemini File API.');
 
     // Step 2: Upload the actual file bytes (via proxy)
-    setContent(`📤 Uploading file to Gemini… (${(numBytes / 1024 / 1024).toFixed(1)} MB)`);
+    setContent(`Uploading file to Gemini… (${(numBytes / 1024 / 1024).toFixed(1)} MB)`);
     const uploadParams = new URLSearchParams({ uploadUrl });
     const uploadRes = await fetch(`/api/gemini-upload-bytes?${uploadParams}`, {
       method: 'POST',
@@ -1355,7 +1356,7 @@ function App() {
     let fullText = '';
 
     for (let i = 1; i <= totalPages; i++) {
-      setContent(`🔍 [Local OCR: ${localOcrModel}] Transcribing Page ${i} of ${totalPages} from ${file.name}...`);
+      setContent(`[Local OCR: ${localOcrModel}] Transcribing Page ${i} of ${totalPages} from ${file.name}...`);
       const page = await pdf.getPage(i);
       const viewport = page.getViewport({ scale: 1.8 });
 
@@ -1407,7 +1408,7 @@ function App() {
 
       if (localOcrEnabled) {
         if (isImg) {
-          setContent(`🔍 [Local OCR: ${localOcrModel}] Transcribing Image ${idx + 1} of ${files.length}: ${file.name}...`);
+          setContent(`[Local OCR: ${localOcrModel}] Transcribing Image ${idx + 1} of ${files.length}: ${file.name}...`);
           const text = await ocrImageWithLocalLmStudio(file);
           combinedText += `\n\n===== ATTACHED FILE ${idx + 1}/${files.length}: ${file.name} (Transcribed via Local OCR) =====\n${text}`;
         } else {
@@ -1444,7 +1445,7 @@ function App() {
     if (!skipFileUploads && !localOcrEnabled && sourceFiles.length > 0) {
       for (let idx = 0; idx < sourceFiles.length; idx++) {
         let fileToProcess = sourceFiles[idx];
-        setContent(`📄 Preparing file ${idx + 1} of ${sourceFiles.length}: ${fileToProcess.name}...`);
+        setContent(`Preparing file ${idx + 1} of ${sourceFiles.length}: ${fileToProcess.name}...`);
 
         if (fileToProcess.type === 'application/pdf' && fileToProcess.size > INLINE_SIZE_LIMIT) {
           try {
@@ -1474,7 +1475,7 @@ function App() {
     }
 
     contentsParts.push({ text: finalUserContent });
-    setContent('🧠 Gemini is analyzing transcribed material & generating output…');
+    setContent('Gemini is analyzing transcribed material & generating output…');
 
     const modelName = await getAvailableGeminiModel(geminiApiKey);
     const response = await fetch(
@@ -1510,7 +1511,7 @@ function App() {
       userContent = userContent.slice(0, maxDocChars) + '\n\n[... Input text truncated to fit Groq context limits.]';
     }
 
-    setContent(`⚡ Groq (${selectedModel.label}) is writing notes/exam paper at high speed…`);
+    setContent(`Groq (${selectedModel.label}) is writing notes/exam paper at high speed…`);
 
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
@@ -1545,7 +1546,7 @@ function App() {
       userContent = userContent.slice(0, selectedModel.maxInputChars) + '\n\n[... Input text truncated to fit model context.]';
     }
 
-    setContent(`🧠 OpenRouter (${selectedModel.label}) is analyzing and reasoning…`);
+    setContent(`OpenRouter (${selectedModel.label}) is analyzing and reasoning…`);
 
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
@@ -1670,7 +1671,7 @@ function App() {
       }
 
       // ── Stage 2/2: Mandatory Deep AI Verification & Hallucination Elimination Pass ─────
-      setContent('🔍 Stage 2/2: Performing strict line-by-line verification against source documents & syllabus (Eliminating hallucinations & checking for missing concepts)...');
+      setContent('Stage 2/2: Performing strict line-by-line verification against source documents & syllabus (Eliminating hallucinations & checking for missing concepts)...');
 
       try {
         const auditPrompt = buildSyllabusAuditPrompt({
@@ -1972,7 +1973,7 @@ function App() {
                         </div>
                       </div>
                       {testOcrStatus && (
-                        <div className="local-ocr-test-status" style={{ fontSize: '0.75rem', marginTop: '0.35rem', color: testOcrStatus.includes('✅') ? '#4ade80' : '#f87171' }}>
+                        <div className="local-ocr-test-status" style={{ fontSize: '0.75rem', marginTop: '0.35rem', color: testOcrStatus.includes('Connected') ? '#4ade80' : '#f87171' }}>
                           {testOcrStatus}
                         </div>
                       )}
@@ -2686,7 +2687,7 @@ function App() {
                   <p className="audit-summary-text">{auditMetadata.auditNotes}</p>
                   {auditMetadata.missingTopicsAdded.length > 0 && (
                     <div className="audit-section-block">
-                      <span className="audit-section-heading">📚 Added & Enriched Missing Syllabus Topics:</span>
+                      <span className="audit-section-heading">Added & Enriched Missing Syllabus Topics:</span>
                       <div className="audit-tags-container">
                         {auditMetadata.missingTopicsAdded.map((item, idx) => (
                           <span key={idx} className="audit-item-tag green">✓ {item}</span>
@@ -2696,7 +2697,7 @@ function App() {
                   )}
                   {auditMetadata.correctedItems.length > 0 && (
                     <div className="audit-section-block">
-                      <span className="audit-section-heading">🛠️ Verified & Fixed Inaccuracies / Language:</span>
+                      <span className="audit-section-heading">Verified & Fixed Inaccuracies / Language:</span>
                       <div className="audit-tags-container">
                         {auditMetadata.correctedItems.map((item, idx) => (
                           <span key={idx} className="audit-item-tag blue">✓ {item}</span>
@@ -2706,7 +2707,7 @@ function App() {
                   )}
                   {auditMetadata.verifiedTopics.length > 0 && (
                     <div className="audit-section-block">
-                      <span className="audit-section-heading">🎯 Core Topics Verified:</span>
+                      <span className="audit-section-heading">Core Topics Verified:</span>
                       <div className="audit-tags-container">
                         {auditMetadata.verifiedTopics.map((item, idx) => (
                           <span key={idx} className="audit-item-tag gray">✓ {item}</span>

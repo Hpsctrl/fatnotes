@@ -191,7 +191,7 @@ export const QuestionPaperForm: React.FC<QuestionPaperFormProps> = ({
           className="qp-collapsible-header"
           onClick={() => setShowHeaderSettings(!showHeaderSettings)}
         >
-          <span>🏫 Institution & Exam Header Details</span>
+          <span>Institution & Exam Header Details</span>
           {showHeaderSettings ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
         </div>
 
@@ -262,7 +262,7 @@ export const QuestionPaperForm: React.FC<QuestionPaperFormProps> = ({
               className={`qp-diff-btn ${config.difficulty === diff ? 'active' : ''}`}
               onClick={() => onChangeConfig({ ...config, difficulty: diff })}
             >
-              {diff === 'easy' ? '🌱 Easy' : diff === 'standard' ? '⚖️ Balanced' : '🔥 HOTS / Hard'}
+              {diff === 'easy' ? 'Easy' : diff === 'standard' ? 'Balanced' : 'HOTS / Hard'}
             </button>
           ))}
         </div>

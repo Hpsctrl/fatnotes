@@ -317,7 +317,7 @@ export async function exportNotesToAestheticPdf({
     const A4_HEIGHT_PT = 841.89;
 
     for (let i = 0; i < pages.length; i++) {
-      onProgress?.(`⚡ Rendering page ${i + 1} of ${totalPages}...`);
+      onProgress?.(`Rendering page ${i + 1} of ${totalPages}...`);
       
       // html2canvas renders only this single page: 800 x 1132 -> at scale 2 = 1600 x 2264 px
       // Well within browser limits (16,384px), guarantees crisp text & zero blank pages!
