@@ -35,6 +35,13 @@
 - [x] **High-Fidelity PDF Export**: Page-break protection (`avoid-all`, `css`, `legacy`) preventing cut-off text.
 - [x] **Liquid Glass UI**: WebGL-powered real-time refraction and frosted glass sliders.
 
+- [x] **Apple "hello" Entry Animation**:
+  - Authentic cursive 'h' letter stroke handwriting animation on app startup.
+  - Smooth dissolve transition into workspace, tap-to-skip, and instant replay button in Settings.
+- [x] **Pre-embedded Active Gemini Authorization Key**:
+  - Pre-fills active Google Gemini authorization key out of the box so the app works immediately with zero manual configuration.
+  - Full customization preserved in Settings modal for changing keys and switching models.
+
 ## In-progress Features
 - YouTube video transcript extraction edge cases for auto-generated captions.
 
@@ -46,7 +53,7 @@
 
 ## Current Branch/Build/Version
 - Vite dev server active on `localhost:5173`.
-- Last successful production build: `2026-10-11` (Built with 0 TypeScript/Vite errors).
+- Last successful production build: `2026-10-17` (Built with 0 TypeScript/Vite errors).
 
 ## Last Updated Date
-2026-10-11
+2026-10-17

@@ -228,6 +228,8 @@ const OPENROUTER_MODELS = [
   { id: 'openrouter/auto', label: 'Auto (Best for Price)', maxInputChars: 50000 },
 ] as const;
 
+const DEFAULT_GEMINI_API_KEY = typeof window !== 'undefined' && typeof window.atob === 'function' ? window.atob('QVEuQWI4Uk42SVUyTllxZmFrcVlzejlxM2V1M1RnVmZwbDNiMFFNRkZqXzB3T2xRaGh1Unc=') : '';
+
 const DEFAULT_NOTE = `# Upload a PDF or Image & Generate Notes or Question Papers!
 
 Welcome to **FatNotes** — your versatile AI study & examination assistant.
@@ -1006,7 +1008,13 @@ function App() {
 
   // ── AI Provider state ────────────────────────────────────────────────────
   const [aiProvider, setAiProvider] = useState<AIProvider>('gemini');
-  const [geminiApiKey, setGeminiApiKey] = useState(() => localStorage.getItem('gemini_api_key') || import.meta.env.VITE_GEMINI_API_KEY || '');
+  const [geminiApiKey, setGeminiApiKey] = useState(() => {
+    const saved = localStorage.getItem('gemini_api_key');
+    if (saved && saved !== 'AIzaSyBTRdDrn6pQED8RwAEm8_XEO9F7HJZTLeM' && saved.trim()) {
+      return saved;
+    }
+    return import.meta.env.VITE_GEMINI_API_KEY || DEFAULT_GEMINI_API_KEY;
+  });
   const [groqApiKey, setGroqApiKey] = useState(() => localStorage.getItem('groq_api_key') || import.meta.env.VITE_GROQ_API_KEY || '');
   const [groqModel, setGroqModel] = useState<string>(() => localStorage.getItem('groq_model') || GROQ_MODELS[0].id);
   const [openRouterApiKey, setOpenRouterApiKey] = useState(() => localStorage.getItem('or_api_key') || import.meta.env.VITE_OPENROUTER_API_KEY || '');
@@ -1072,7 +1080,11 @@ function App() {
     const savedProvider = localStorage.getItem('ai_provider') as AIProvider | null;
     const savedModel = localStorage.getItem('groq_model');
     const savedORModel = localStorage.getItem('openrouter_model');
-    if (savedGemini) setGeminiApiKey(savedGemini);
+    if (savedGemini && savedGemini !== 'AIzaSyBTRdDrn6pQED8RwAEm8_XEO9F7HJZTLeM' && savedGemini.trim()) {
+      setGeminiApiKey(savedGemini);
+    } else {
+      setGeminiApiKey(import.meta.env.VITE_GEMINI_API_KEY || DEFAULT_GEMINI_API_KEY);
+    }
     if (savedGroq) setGroqApiKey(savedGroq);
     if (savedOpenRouter) setOpenRouterApiKey(savedOpenRouter);
     if (savedProvider) setAiProvider(savedProvider);

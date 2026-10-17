@@ -1,6 +1,10 @@
 # Changelog
- 
-## 2026-10-11
+
+## 2026-10-17
+* **Added**: Apple "hello" entry animation — renders iconic fluid handwritten cursive 'h' letter stroke animation on app startup with smooth dissolve transition into the workspace and manual replay control.
+* **Changed**: Pre-embedded active Google Gemini authorization API key as default out-of-the-box fallback while keeping Settings modal and API key input fully editable.
+* **Changed**: Streamlined product branding from "AesthetNote" / "aesthetic notes" to clean, professional **FatNotes** across welcome guide, PWA installation cards, meta tags, and documentation.
+* **Added**: Replay Entry Animation trigger button inside Settings modal on Desktop and Mobile.
 * **Added**: Automatic Language Detection — intelligently inspects source text and user prompt script. Completely removes manual buttons and UI clutter while guaranteeing 100% English outputs for English textbooks and syllabi.
 * **Added**: Mandatory Deep AI Verification & Zero-Hallucination Pipeline — notes are never shown until an AI Auditor cross-examines the draft against the raw source documents, verifying point-by-point coverage, correcting any factual errors, and recovering any skipped subtopics, dates, or formulas.
 * **Added**: Reassuring "🛡️ Verified AI Study Material" banner in the preview panel with zero-hallucination proof and expandable audit breakdown.

@@ -2,6 +2,7 @@
 
 ## Major Components
 - **`src/App.tsx`**: Central application component housing state management, multi-file handling, Local LM Studio OCR pipeline, AI provider API clients (Gemini, Groq, OpenRouter), Settings modal, and PDF export logic.
+- **`src/components/AppleHelloIntro.tsx`**: Startup splash/intro animation rendering Apple's iconic handwritten cursive 'h' letter stroke animation with skip handling and replay controls.
 - **`src/components/QuestionPaperView.tsx`**: Specialized exam paper renderer offering 4 visual themes ("Scary White Page" CBSE/ICSE board exam, Modern Academy, Vintage Typewriter, Aesthetic Dark), multi-tab toggle (Paper / Marking Scheme / Combined), and print formatting.
 - **`src/components/QuestionPaperForm.tsx`**: Question paper customization drawer allowing dynamic section configuration, difficulty presets, and blueprint adjustments.
 - **`src/services/questionPaperPrompt.ts`**: Blueprint prompt generator enforcing CBSE/ICSE exam standards and step-by-step marking rubrics.
