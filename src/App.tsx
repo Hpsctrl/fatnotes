@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { QuestionPaperRenderer } from './components/QuestionPaperRenderer';
 import { detectLanguageFromContent, buildSyllabusAuditPrompt, parseAuditResponse, type AuditMetadata, type DetectedLanguage } from './services/syllabusAuditService';
 import { exportNotesToPdf } from './services/pdfExportService';
+import { AppleHelloIntro } from './components/AppleHelloIntro';
 import './App.css';
 
 /* --- Animated Background Grid Component --- */
@@ -772,6 +773,7 @@ function App() {
     };
   });
 
+  const [showEntryIntro, setShowEntryIntro] = useState(true);
   const [content, setContent] = useState(DEFAULT_NOTE);
   const [isExporting, setIsExporting] = useState(false);
   const [exportProgress, setExportProgress] = useState<string | null>(null);
@@ -1734,6 +1736,11 @@ function App() {
 
   return (
     <>
+      <AnimatePresence>
+        {showEntryIntro && (
+          <AppleHelloIntro onComplete={() => setShowEntryIntro(false)} />
+        )}
+      </AnimatePresence>
       <div className="app-container">
         <BackgroundGrid />
 
@@ -2031,6 +2038,35 @@ function App() {
                       </div>
                       <input type="range" min="0" max="30" step="1" value={glassSettings.frost} onChange={e => updateGlassSetting('frost', parseFloat(e.target.value))} />
                     </div>
+
+                    <button
+                      type="button"
+                      className="replay-intro-btn"
+                      onClick={() => {
+                        setShowSettings(false);
+                        setShowEntryIntro(true);
+                      }}
+                      style={{
+                        marginTop: '1.25rem',
+                        width: '100%',
+                        padding: '0.65rem 1rem',
+                        borderRadius: '12px',
+                        background: 'rgba(255, 255, 255, 0.08)',
+                        border: '1px solid rgba(255, 255, 255, 0.16)',
+                        color: 'rgba(255, 255, 255, 0.9)',
+                        fontWeight: 600,
+                        fontSize: '0.82rem',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '0.5rem',
+                        transition: 'all 0.2s ease',
+                      }}
+                    >
+                      <Sparkles size={14} />
+                      <span>Replay 'h' Entry Animation</span>
+                    </button>
                   </div>
                 </div>
               </motion.div>
@@ -2323,6 +2359,35 @@ function App() {
                         </motion.div>
                       )}
                     </AnimatePresence>
+
+                    <button
+                      type="button"
+                      className="replay-intro-btn"
+                      onClick={() => {
+                        setShowSettings(false);
+                        setShowEntryIntro(true);
+                      }}
+                      style={{
+                        marginTop: '1.25rem',
+                        width: '100%',
+                        padding: '0.65rem 1rem',
+                        borderRadius: '12px',
+                        background: 'rgba(255, 255, 255, 0.08)',
+                        border: '1px solid rgba(255, 255, 255, 0.16)',
+                        color: 'rgba(255, 255, 255, 0.9)',
+                        fontWeight: 600,
+                        fontSize: '0.82rem',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '0.5rem',
+                        transition: 'all 0.2s ease',
+                      }}
+                    >
+                      <Sparkles size={14} />
+                      <span>Replay 'h' Entry Animation</span>
+                    </button>
                   </div>
 
                 </div>
