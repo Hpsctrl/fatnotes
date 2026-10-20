@@ -1,13 +1,11 @@
-/* ── Fish Intro Animation Overlay ────────────────────────────────────── */
-.fish-intro-overlay {
+/* ── Shared Intro Overlay ────────────────────────────────────────────────── */
+.lottie-intro-overlay {
   position: fixed;
   inset: 0;
   width: 100vw;
   height: 100vh;
   height: 100dvh;
   z-index: 999999;
-  background: #050811;
-  background: radial-gradient(circle at 50% 50%, #0d1527 0%, #060912 70%, #03050a 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -16,50 +14,112 @@
   user-select: none;
   -webkit-user-select: none;
   overflow: hidden;
-  touch-action: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
 }
 
-/* Ambient bioluminescent glow behind fish */
-.fish-intro-ambient-glow {
+/* Align-bottom variant (Appy Present bottom-peek) */
+.lottie-intro-overlay.align-bottom {
+  justify-content: flex-end;
+}
+
+/* ── Ambient glow backdrop ───────────────────────────────────────────────── */
+.intro-backdrop-glow {
   position: absolute;
-  width: 700px;
-  height: 700px;
-  max-width: 90vw;
-  max-height: 90vw;
+  width: 720px;
+  height: 720px;
+  max-width: 95vw;
+  max-height: 95vw;
   border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(56, 189, 248, 0.15) 0%,
-    rgba(129, 140, 248, 0.09) 35%,
-    rgba(168, 85, 247, 0.04) 60%,
-    transparent 75%
-  );
   filter: blur(60px);
   pointer-events: none;
-  animation: fishGlowPulse 3s ease-in-out infinite alternate;
+  animation: introGlowPulse 2.6s ease-in-out infinite alternate;
+  transition: background 0.45s ease, opacity 0.45s ease;
+  will-change: transform, opacity;
 }
 
-@keyframes fishGlowPulse {
-  0% {
-    transform: scale(0.9) translate3d(0, 0, 0);
-    opacity: 0.7;
-  }
-  100% {
-    transform: scale(1.1) translate3d(0, 0, 0);
-    opacity: 1;
-  }
+@keyframes introGlowPulse {
+  0%   { transform: scale(0.92); opacity: 0.7; }
+  100% { transform: scale(1.08); opacity: 1; }
 }
 
-/* Subtle water caustics / light refractions */
-.fish-intro-radial-caustics {
+/* ── Lottie container (non-fish animations) ──────────────────────────────── */
+.intro-lottie-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+  will-change: transform;
+}
+
+/* Square 1:1  (character_c, cat_peek) */
+.intro-lottie-container.aspect-square {
+  width: min(380px, 46vw);
+  height: min(380px, 46vh);
+}
+
+/* Portrait 9:16 */
+.intro-lottie-container.aspect-portrait {
+  height: min(65vh, 520px);
+  width: min(calc(min(65vh, 520px) * (1440 / 2560)), 85vw);
+}
+
+/* Bottom-peeking character (appy_present) */
+.intro-lottie-container.aspect-bottom-peek {
+  width: min(780px, 94vw);
+  height: min(500px, 62vh);
+  margin-bottom: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.intro-lottie-container svg {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  overflow: visible;
+}
+
+/* ── Skip hint pill ──────────────────────────────────────────────────────── */
+.intro-skip-hint {
   position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 20% 30%, rgba(56, 189, 248, 0.05) 0%, transparent 40%),
-              radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.05) 0%, transparent 45%);
+  bottom: 2.25rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', system-ui, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.45rem 1.15rem;
+  border-radius: 999px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
   pointer-events: none;
+  transition: opacity 0.3s ease, color 0.45s ease, background 0.45s ease, border-color 0.45s ease;
+  animation: introHintFade 1.6s ease-in-out infinite alternate;
 }
 
-/* Floating interactive Fish follower wrapper */
+/* When character peeks from bottom, move hint to top */
+.intro-skip-hint.hint-top {
+  bottom: auto;
+  top: calc(2.25rem + env(safe-area-inset-top, 0px));
+}
+
+@keyframes introHintFade {
+  0%   { opacity: 0.55; transform: translateY(0); }
+  100% { opacity: 1;    transform: translateY(-2px); }
+}
+
+/* ── Fish-specific: absolute positioned follower ─────────────────────────── */
 .fish-follower-wrapper {
   position: absolute;
   top: 0;
@@ -71,7 +131,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  filter: drop-shadow(0 10px 25px rgba(56, 189, 248, 0.22)) drop-shadow(0 0 35px rgba(139, 92, 246, 0.18));
+  filter: drop-shadow(0 10px 25px rgba(56, 189, 248, 0.22))
+          drop-shadow(0 0 35px rgba(139, 92, 246, 0.18));
 }
 
 .fish-follower-wrapper.is-mobile {
@@ -79,7 +140,6 @@
   height: 220px;
 }
 
-/* Lottie SVG canvas container */
 .fish-lottie-container {
   width: 100%;
   height: 100%;
@@ -94,69 +154,55 @@
   overflow: visible !important;
 }
 
-/* Bioluminescent halo around fish body */
+/* Bioluminescent halo around fish */
 .fish-trail-glow {
   position: absolute;
   width: 140px;
   height: 140px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, rgba(99, 102, 241, 0.1) 50%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(56, 189, 248, 0.25) 0%,
+    rgba(99, 102, 241, 0.10) 50%,
+    transparent 70%
+  );
   filter: blur(20px);
   pointer-events: none;
   z-index: -1;
 }
 
-/* Minimalist footer hint */
-.fish-intro-footer {
-  position: absolute;
-  bottom: 2rem;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: center;
-  pointer-events: none;
-  padding: 0 1rem;
-}
-
-.fish-intro-hint {
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', system-ui, sans-serif;
-  font-size: 0.8125rem;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  color: rgba(255, 255, 255, 0.55);
-  background: rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  padding: 0.5rem 1.1rem;
-  border-radius: 9999px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-  transition: opacity 0.3s ease;
-  animation: fadeInHint 0.8s ease 0.4s both;
-}
-
-@keyframes fadeInHint {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
+/* ── Mobile Responsive ───────────────────────────────────────────────────── */
+@media (max-width: 768px), (orientation: portrait) and (max-width: 1024px) {
+  .intro-lottie-container.aspect-square {
+    width: min(290px, 78vw);
+    height: min(290px, 78vw);
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 
-/* Mobile responsive constraints */
-@media (max-width: 640px) {
+  .intro-lottie-container.aspect-portrait {
+    width: min(84vw, 350px);
+    height: min(calc(min(84vw, 350px) * (2560 / 1440)), 72vh);
+  }
+
+  .intro-lottie-container.aspect-bottom-peek {
+    width: 100vw;
+    height: min(400px, 54vh);
+    margin-bottom: 0;
+  }
+
+  .intro-skip-hint {
+    bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+    font-size: 0.72rem;
+    padding: 0.4rem 0.95rem;
+    letter-spacing: 0.06em;
+  }
+
+  .intro-skip-hint.hint-top {
+    bottom: auto;
+    top: calc(20px + env(safe-area-inset-top, 0px));
+  }
+
   .fish-follower-wrapper {
     width: 210px;
     height: 210px;
-  }
-  .fish-intro-footer {
-    bottom: 1.5rem;
-  }
-  .fish-intro-hint {
-    font-size: 0.75rem;
-    padding: 0.4rem 0.9rem;
   }
 }
