@@ -1,12 +1,13 @@
-/* ── Apple "hello" Intro Animation Overlay ────────────────────────────── */
-.apple-hello-overlay {
+/* ── Fish Intro Animation Overlay ────────────────────────────────────── */
+.fish-intro-overlay {
   position: fixed;
   inset: 0;
   width: 100vw;
   height: 100vh;
   height: 100dvh;
   z-index: 999999;
-  background: #060910;
+  background: #050811;
+  background: radial-gradient(circle at 50% 50%, #0d1527 0%, #060912 70%, #03050a 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -15,107 +16,147 @@
   user-select: none;
   -webkit-user-select: none;
   overflow: hidden;
-  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  touch-action: none;
 }
 
-/* Subtle Apple-style radial ambient glow */
-.apple-hello-backdrop-glow {
+/* Ambient bioluminescent glow behind fish */
+.fish-intro-ambient-glow {
   position: absolute;
-  width: 600px;
-  height: 600px;
+  width: 700px;
+  height: 700px;
   max-width: 90vw;
   max-height: 90vw;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, rgba(99, 102, 241, 0.06) 40%, transparent 70%);
-  filter: blur(40px);
+  background: radial-gradient(
+    circle,
+    rgba(56, 189, 248, 0.15) 0%,
+    rgba(129, 140, 248, 0.09) 35%,
+    rgba(168, 85, 247, 0.04) 60%,
+    transparent 75%
+  );
+  filter: blur(60px);
   pointer-events: none;
-  animation: appleGlowPulse 2.5s ease-in-out infinite alternate;
+  animation: fishGlowPulse 3s ease-in-out infinite alternate;
 }
 
-@keyframes appleGlowPulse {
+@keyframes fishGlowPulse {
   0% {
-    transform: scale(0.92);
-    opacity: 0.6;
+    transform: scale(0.9) translate3d(0, 0, 0);
+    opacity: 0.7;
   }
   100% {
-    transform: scale(1.08);
+    transform: scale(1.1) translate3d(0, 0, 0);
     opacity: 1;
   }
 }
 
-/* Container for the 'h' glyph */
-.apple-hello-container {
-  position: relative;
-  width: min(280px, 60vw);
-  height: min(320px, 68vw);
+/* Subtle water caustics / light refractions */
+.fish-intro-radial-caustics {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 20% 30%, rgba(56, 189, 248, 0.05) 0%, transparent 40%),
+              radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.05) 0%, transparent 45%);
+  pointer-events: none;
+}
+
+/* Floating interactive Fish follower wrapper */
+.fish-follower-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 280px;
+  height: 280px;
+  pointer-events: none;
+  will-change: transform;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 10px 25px rgba(56, 189, 248, 0.22)) drop-shadow(0 0 35px rgba(139, 92, 246, 0.18));
+}
+
+.fish-follower-wrapper.is-mobile {
+  width: 220px;
+  height: 220px;
+}
+
+/* Lottie SVG canvas container */
+.fish-lottie-container {
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.apple-hello-svg {
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-  filter: drop-shadow(0 0 16px rgba(255, 255, 255, 0.45)) drop-shadow(0 0 32px rgba(59, 130, 246, 0.25));
+.fish-lottie-container svg {
+  width: 100% !important;
+  height: 100% !important;
+  overflow: visible !important;
 }
 
-/* Monoline cursive strokes */
-.apple-hello-stroke {
-  fill: none;
-  stroke: #ffffff;
-  stroke-width: 44;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  will-change: stroke-dashoffset;
-}
-
-/* Stroke 1: Loop and tall downstem */
-.apple-hello-loop {
-  animation: drawLoop 0.85s cubic-bezier(0.42, 0, 0.18, 1) 0.15s forwards;
-}
-
-/* Stroke 2: Retrace, arch and exit flourish */
-.apple-hello-arch {
-  animation: drawArch 0.75s cubic-bezier(0.35, 0, 0.2, 1) 0.75s forwards;
-}
-
-@keyframes drawLoop {
-  0% {
-    stroke-dashoffset: 1;
-  }
-  100% {
-    stroke-dashoffset: 0;
-  }
-}
-
-@keyframes drawArch {
-  0% {
-    stroke-dashoffset: 1;
-  }
-  100% {
-    stroke-dashoffset: 0;
-  }
-}
-
-/* Subtle skip hint */
-.apple-hello-skip-hint {
+/* Bioluminescent halo around fish body */
+.fish-trail-glow {
   position: absolute;
-  bottom: 2.5rem;
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.35);
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, rgba(99, 102, 241, 0.1) 50%, transparent 70%);
+  filter: blur(20px);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Minimalist footer hint */
+.fish-intro-footer {
+  position: absolute;
+  bottom: 2rem;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  padding: 0 1rem;
+}
+
+.fish-intro-hint {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', system-ui, sans-serif;
+  font-size: 0.8125rem;
   font-weight: 500;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 0.5rem 1.1rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
   transition: opacity 0.3s ease;
-  animation: fadeInHint 0.8s ease 1.2s forwards;
-  opacity: 0;
+  animation: fadeInHint 0.8s ease 0.4s both;
 }
 
 @keyframes fadeInHint {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
   to {
-    opacity: 0.4;
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile responsive constraints */
+@media (max-width: 640px) {
+  .fish-follower-wrapper {
+    width: 210px;
+    height: 210px;
+  }
+  .fish-intro-footer {
+    bottom: 1.5rem;
+  }
+  .fish-intro-hint {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.9rem;
   }
 }

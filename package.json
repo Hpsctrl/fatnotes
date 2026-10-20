@@ -16,6 +16,7 @@
     "framer-motion": "^12.38.0",
     "html2canvas": "^1.4.1",
     "html2pdf.js": "^0.14.0",
+    "lottie-web": "^5.13.0",
     "lucide-react": "^1.7.0",
     "pdf-lib": "^1.17.1",
     "pdfjs-dist": "^5.6.205",
